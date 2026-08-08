@@ -1,6 +1,6 @@
 #---------------------------------------------------#
 #                 Clash Configuration               #
-#         Generated based on user request           #
+#      Based on Freedom House (High Privacy)        #
 #---------------------------------------------------#
 
 # General settings
@@ -125,18 +125,18 @@ proxy-groups:
     type: select
     icon: https://www.svgrepo.com/show/372331/cursor-hand-click.svg
     proxies:
-      - عراق 🇮🇶
-      - آذربایجان 🇦🇿
-      - ارمنستان 🇦🇲
-      - امارات 🇦🇪
-      - عمان 🇴🇲
-      - بحرین 🇧🇭
-      - گرجستان 🇬🇪
-      - قبرس 🇨🇾
-      - قزاقستان 🇰🇿
-      - آلمان 🇩🇪
-      - بلغارستان 🇧🇬
-      - ایران 🇮🇷
+      - سوئیس 🇨🇭
+      - استونی 🇪🇪
+      - فنلاند 🇫🇮
+      - نروژ 🇳🇴
+      - هلند 🇳🇱
+      - لوکزامبورگ 🇱🇺
+      - نیوزیلند 🇳🇿
+      - دانمارک 🇩🇰
+      - کانادا 🇨🇦
+      - اتریش 🇦🇹
+      - بلژیک 🇧🇪
+      - لیتوانی 🇱🇹
 
   - name: خودکار 🤖
     type: fallback
@@ -148,29 +148,29 @@ proxy-groups:
     expected-status: 204
     icon: https://www.svgrepo.com/show/415208/backup-cloud-document.svg
     proxies:
-      - عراق 🇮🇶
-      - آذربایجان 🇦🇿
-      - ارمنستان 🇦🇲
-      - امارات 🇦🇪
-      - عمان 🇴🇲
-      - بحرین 🇧🇭
-      - گرجستان 🇬🇪
-      - قبرس 🇨🇾
-      - قزاقستان 🇰🇿
-      - آلمان 🇩🇪
-      - بلغارستان 🇧🇬
-      - ایران 🇮🇷
+      - سوئیس 🇨🇭
+      - استونی 🇪🇪
+      - فنلاند 🇫🇮
+      - نروژ 🇳🇴
+      - هلند 🇳🇱
+      - لوکزامبورگ 🇱🇺
+      - نیوزیلند 🇳🇿
+      - دانمارک 🇩🇰
+      - کانادا 🇨🇦
+      - اتریش 🇦🇹
+      - بلژیک 🇧🇪
+      - لیتوانی 🇱🇹
 
   # --- Country Specific Groups ---
-  - name: عراق 🇮🇶
+  - name: سوئیس 🇨🇭
     type: select
-    icon: https://upload.wikimedia.org/wikipedia/commons/f/f6/Flag_of_Iraq.svg
+    icon: https://upload.wikimedia.org/wikipedia/commons/0/08/Flag_of_Switzerland_%28Pantone%29.svg
     proxies:
-      - خودکار عراق
+      - خودکار سوئیس
     use:
-      - Iraq
+      - Switzerland
 
-  - name: خودکار عراق
+  - name: خودکار سوئیس
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 600
@@ -180,17 +180,17 @@ proxy-groups:
     expected-status: 204
     hidden: true
     use:
-      - Iraq
+      - Switzerland
 
-  - name: آذربایجان 🇦🇿
+  - name: استونی 🇪🇪
     type: select
-    icon: https://upload.wikimedia.org/wikipedia/commons/d/dd/Flag_of_Azerbaijan.svg
+    icon: https://upload.wikimedia.org/wikipedia/commons/8/8f/Flag_of_Estonia.svg
     proxies:
-      - خودکار آذربایجان
+      - خودکار استونی
     use:
-      - Azerbaijan
+      - Estonia
 
-  - name: خودکار آذربایجان
+  - name: خودکار استونی
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 600
@@ -200,17 +200,17 @@ proxy-groups:
     expected-status: 204
     hidden: true
     use:
-      - Azerbaijan
+      - Estonia
 
-  - name: ارمنستان 🇦🇲
+  - name: فنلاند 🇫🇮
     type: select
-    icon: https://upload.wikimedia.org/wikipedia/commons/2/2f/Flag_of_Armenia.svg
+    icon: https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Finland.svg
     proxies:
-      - خودکار ارمنستان
+      - خودکار فنلاند
     use:
-      - Armenia
+      - Finland
 
-  - name: خودکار ارمنستان
+  - name: خودکار فنلاند
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 600
@@ -220,17 +220,17 @@ proxy-groups:
     expected-status: 204
     hidden: true
     use:
-      - Armenia
+      - Finland
 
-  - name: امارات 🇦🇪
+  - name: نروژ 🇳🇴
     type: select
-    icon: https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_United_Arab_Emirates.svg
+    icon: https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Norway.svg
     proxies:
-      - خودکار امارات
+      - خودکار نروژ
     use:
-      - UAE
+      - Norway
 
-  - name: خودکار امارات
+  - name: خودکار نروژ
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 600
@@ -240,17 +240,17 @@ proxy-groups:
     expected-status: 204
     hidden: true
     use:
-      - UAE
+      - Norway
 
-  - name: عمان 🇴🇲
+  - name: هلند 🇳🇱
     type: select
-    icon: https://upload.wikimedia.org/wikipedia/commons/d/dd/Flag_of_Oman.svg
+    icon: https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_the_Netherlands.svg
     proxies:
-      - خودکار عمان
+      - خودکار هلند
     use:
-      - Oman
+      - Netherlands
 
-  - name: خودکار عمان
+  - name: خودکار هلند
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 600
@@ -260,17 +260,17 @@ proxy-groups:
     expected-status: 204
     hidden: true
     use:
-      - Oman
+      - Netherlands
 
-  - name: بحرین 🇧🇭
+  - name: لوکزامبورگ 🇱🇺
     type: select
-    icon: https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Bahrain.svg
+    icon: https://upload.wikimedia.org/wikipedia/commons/d/da/Flag_of_Luxembourg.svg
     proxies:
-      - خودکار بحرین
+      - خودکار لوکزامبورگ
     use:
-      - Bahrain
+      - Luxembourg
 
-  - name: خودکار بحرین
+  - name: خودکار لوکزامبورگ
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 600
@@ -280,17 +280,17 @@ proxy-groups:
     expected-status: 204
     hidden: true
     use:
-      - Bahrain
+      - Luxembourg
 
-  - name: گرجستان 🇬🇪
+  - name: نیوزیلند 🇳🇿
     type: select
-    icon: https://upload.wikimedia.org/wikipedia/commons/0/0f/Flag_of_Georgia.svg
+    icon: https://upload.wikimedia.org/wikipedia/commons/3/3e/Flag_of_New_Zealand.svg
     proxies:
-      - خودکار گرجستان
+      - خودکار نیوزیلند
     use:
-      - Georgia
+      - NewZealand
 
-  - name: خودکار گرجستان
+  - name: خودکار نیوزیلند
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 600
@@ -300,17 +300,17 @@ proxy-groups:
     expected-status: 204
     hidden: true
     use:
-      - Georgia
+      - NewZealand
 
-  - name: قبرس 🇨🇾
+  - name: دانمارک 🇩🇰
     type: select
-    icon: https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Cyprus.svg
+    icon: https://upload.wikimedia.org/wikipedia/commons/9/9c/Flag_of_Denmark.svg
     proxies:
-      - خودکار قبرس
+      - خودکار دانمارک
     use:
-      - Cyprus
+      - Denmark
 
-  - name: خودکار قبرس
+  - name: خودکار دانمارک
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 600
@@ -320,17 +320,17 @@ proxy-groups:
     expected-status: 204
     hidden: true
     use:
-      - Cyprus
+      - Denmark
 
-  - name: قزاقستان 🇰🇿
+  - name: کانادا 🇨🇦
     type: select
-    icon: https://upload.wikimedia.org/wikipedia/commons/d/d3/Flag_of_Kazakhstan.svg
+    icon: https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Canada_%28Pantone%29.svg
     proxies:
-      - خودکار قزاقستان
+      - خودکار کانادا
     use:
-      - Kazakhstan
+      - Canada
 
-  - name: خودکار قزاقستان
+  - name: خودکار کانادا
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 600
@@ -340,17 +340,17 @@ proxy-groups:
     expected-status: 204
     hidden: true
     use:
-      - Kazakhstan
+      - Canada
 
-  - name: آلمان 🇩🇪
+  - name: اتریش 🇦🇹
     type: select
-    icon: https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg
+    icon: https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg
     proxies:
-      - خودکار آلمان
+      - خودکار اتریش
     use:
-      - Germany
+      - Austria
 
-  - name: خودکار آلمان
+  - name: خودکار اتریش
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 600
@@ -360,17 +360,17 @@ proxy-groups:
     expected-status: 204
     hidden: true
     use:
-      - Germany
+      - Austria
 
-  - name: بلغارستان 🇧🇬
+  - name: بلژیک 🇧🇪
     type: select
-    icon: https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Bulgaria.svg
+    icon: https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_Belgium.svg
     proxies:
-      - خودکار بلغارستان
+      - خودکار بلژیک
     use:
-      - Bulgaria
+      - Belgium
 
-  - name: خودکار بلغارستان
+  - name: خودکار بلژیک
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 600
@@ -380,17 +380,17 @@ proxy-groups:
     expected-status: 204
     hidden: true
     use:
-      - Bulgaria
+      - Belgium
 
-  - name: ایران 🇮🇷
+  - name: لیتوانی 🇱🇹
     type: select
-    icon: https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Civil_flag_of_Iran_%281964%E2%80%931980%29.svg/120px-Civil_flag_of_Iran_%281964%E2%80%931980%29.svg.png
+    icon: https://upload.wikimedia.org/wikipedia/commons/1/11/Flag_of_Lithuania.svg
     proxies:
-      - خودکار ایران
+      - خودکار لیتوانی
     use:
-      - Iran
+      - Lithuania
 
-  - name: خودکار ایران
+  - name: خودکار لیتوانی
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 600
@@ -400,7 +400,7 @@ proxy-groups:
     expected-status: 204
     hidden: true
     use:
-      - Iran
+      - Lithuania
 
   # --- Utility Groups ---
   - name: بدون فیلترشکن 🛡️
@@ -424,79 +424,80 @@ proxy-groups:
 
 # Proxy Providers
 proxy-providers:
-  Iraq:
+  Switzerland:
     type: http
-    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/IQ.yaml"
+    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/CH.yaml"
     interval: 1440
-    path: "./Iraq.yaml"
+    path: "./Switzerland.yaml"
 
-  Azerbaijan:
+  Estonia:
     type: http
-    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/AZ.yaml"
+    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/EE.yaml"
     interval: 1440
-    path: "./Azerbaijan.yaml"
+    path: "./Estonia.yaml"
 
-  Armenia:
+  Finland:
     type: http
-    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/AM.yaml"
+    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/FI.yaml"
     interval: 1440
-    path: "./Armenia.yaml"
+    path: "./Finland.yaml"
 
-  UAE:
+  Norway:
     type: http
-    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/AE.yaml"
+    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/NO.yaml"
     interval: 1440
-    path: "./UAE.yaml"
+    path: "./Norway.yaml"
 
-  Oman:
+  Netherlands:
     type: http
-    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/OM.yaml"
+    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/NL.yaml"
     interval: 1440
-    path: "./Oman.yaml"
+    path: "./Netherlands.yaml"
 
-  Bahrain:
+  Luxembourg:
     type: http
-    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/BH.yaml"
+    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/LU.yaml"
     interval: 1440
-    path: "./Bahrain.yaml"
+    path: "./Luxembourg.yaml"
 
-  Georgia:
+  NewZealand:
     type: http
-    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/GE.yaml"
+    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/NZ.yaml"
     interval: 1440
-    path: "./Georgia.yaml"
+    path: "./NewZealand.yaml"
 
-  Cyprus:
+  Denmark:
     type: http
-    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/CY.yaml"
+    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/DK.yaml"
     interval: 1440
-    path: "./Cyprus.yaml"
+    path: "./Denmark.yaml"
 
-  Kazakhstan:
+  Canada:
     type: http
-    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/KZ.yaml"
+    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/CA.yaml"
     interval: 1440
-    path: "./Kazakhstan.yaml"
+    path: "./Canada.yaml"
 
-  Germany:
+  Austria:
     type: http
-    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/DE.yaml"
+    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/AT.yaml"
     interval: 1440
-    path: "./Germany.yaml"
+    path: "./Austria.yaml"
 
-  Bulgaria:
+  Belgium:
     type: http
-    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/BG.yaml"
+    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/BE.yaml"
     interval: 1440
-    path: "./Bulgaria.yaml"
+    path: "./Belgium.yaml"
 
-  Iran:
+  Lithuania:
     type: http
-    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/IR.yaml"
+    url: "https://raw.githubusercontent.com/10Dream/sub-mod/main/sub/clash/split/countries/LT.yaml"
     interval: 1440
-    path: "./Iran.yaml"
+    path: "./Lithuania.yaml"
 
 
+# Rules
 rules:
   - MATCH,نوع انتخاب پروکسی 🔀
 

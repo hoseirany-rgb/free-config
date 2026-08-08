@@ -1,0 +1,4714 @@
+global-client-fingerprint: chrome
+keep-alive-interval: 5    # تست کانکشن هر ۵ ثانیه برای کشف سریع قطعی‌ها
+keep-alive-idle: 10       # شروع بررسی بعد از ۱۰ ثانیه بی‌تحرکی کانکشن
+disable-keep-alive: false # حتماً روشن باشد تا کانکشن‌ها در ایران فریز نشوند
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+tproxy-port: 7894
+allow-lan: true
+tcp-concurrent: true      # تست هم‌زمان چند مسیر برای اتصال سریع‌تر
+enable-process: true
+find-process-mode: always
+ipv6: false               # خاموش به دلیل اختلال شدید در ایران
+log-level: info           # بهینه برای کاهش مصرف باتری و پردازنده
+geo-auto-update: true
+geo-update-interval: 168
+secret: ''
+bind-address: '*'
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+# ==========================================
+# ۲. تنظیمات پیشرفته و ضد فیلترینگ DNS
+# ==========================================
+dns:
+  enable: true
+  ipv6: false             # غیرفعال‌سازی برای جلوگیری از تایم‌اوت
+  prefer-h3: false        # غیرفعال‌سازی HTTP/3 به دلیل فیلترینگ شدید روی پروتکل کوئیک
+  cache-algorithm: arc
+  use-system-hosts: true
+  use-host: true
+  listen: 0.0.0.0:53
+  enhanced-mode: fake-ip
+  fake-ip-filter-mode: blacklist
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - '*.lan'
+    - '*.localdomain'
+    - '*.invalid'
+    - '*.localhost'
+    - '*.test'
+    - '*.local'
+    - '*.home.arpa'
+    - 'time.*.com'
+    - 'ntp.*.com'
+    - '*.ir'
+
+  # دی‌ان‌اس‌های اولیه برای پیدا کردن آدرس سرورها
+  default-nameserver:
+    - 1.1.1.1
+    - 8.8.8.8
+    - 9.9.9.9
+
+  # دی‌ان‌اس‌های اصلی (اجبار به TCP برای فرار از دراپ شدن UDP)
+  nameserver:
+    - tcp://1.1.1.1
+    - tcp://1.0.0.1
+    - tcp://8.8.8.8
+    - tcp://8.8.4.4
+    - tcp://9.9.9.9
+    - tcp://149.112.112.112
+    - tcp://208.67.222.222
+    - tcp://208.67.220.222
+
+  # شبکه عظیم دی‌ان‌اس بکاپ شما (تغییر یافته به TCP جهت پایداری ۱۰۰٪ در ایران)
+  fallback:
+    - tcp://76.76.19.19
+    - tcp://76.223.122.150
+    - tcp://185.228.168.9
+    - tcp://185.228.169.9
+    - tcp://8.26.56.26
+    - tcp://8.20.247.20
+    - tcp://76.76.2.11
+    - tcp://76.76.10.11
+    - tcp://84.200.69.80
+    - tcp://84.200.70.40
+    - tcp://45.33.97.5
+    - tcp://37.235.1.177
+    - tcp://209.244.0.3
+    - tcp://209.244.0.4
+    - tcp://156.154.70.5
+    - tcp://156.154.71.5
+    - tcp://103.86.96.100
+    - tcp://103.86.99.100
+    - tcp://199.85.126.10
+    - tcp://199.85.127.10
+    - tcp://129.250.35.250
+    - tcp://129.250.35.251
+    - tcp://94.16.114.254
+    - tcp://94.247.43.254
+    - tcp://208.67.222.20
+    - tcp://195.46.39.39
+    - tcp://195.46.39.40
+    - tcp://204.117.214.10
+    - tcp://199.2.252.10
+    - tcp://194.169.169.169
+    - tcp://156.154.70.1
+    - tcp://156.154.71.1
+    - tcp://91.239.100.100
+    - tcp://89.233.43.71
+    - tcp://64.6.64.6
+    - tcp://64.6.65.6
+    - tcp://77.88.8.8
+    - tcp://77.88.8.1
+
+  # فیلتر هوشمند برای سوئیچ آنی به بکاپ‌ها در صورت آلودگی دی‌ان‌اس در ایران
+  fallback-filter:
+    geoip: true
+    geoip-code: IR # تشخیص آی‌پی‌های فیک فیلترینگ ایران و سوئیچ به بکاپ
+    geosite:
+      - gfw
+    ipcidr:
+      - 240.0.0.0/4
+    domain:
+      - '+.google.com'
+      - '+.facebook.com'
+      - '+.youtube.com'
+
+  # دی‌ان‌اس اختصاصی برای حل آدرس سرورهای خود پروکسی
+  proxy-server-nameserver:
+    - tcp://1.1.1.1
+    - tcp://8.8.8.8
+
+  direct-nameserver:
+    - '78.157.42.100'
+    - '78.157.42.101' 
+
+# ==========================================
+# ۳. سیستم اسنیفر (Sniffer)
+# ==========================================
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  override-destination: false
+  sniff:
+    HTTP:
+      ports: [80, 8080, 8880, 2052, 2082, 2086, 2095]
+    TLS:
+      ports: [443, 8443, 2053, 2083, 2087, 2096]
+
+# ==========================================
+# ۴. تنظیمات تونل شبکه (TUN)
+# ==========================================
+tun:
+  enable: true
+  stack: mixed
+  auto-route: true
+  auto-detect-interface: true
+  auto-redir: true
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+
+rule-providers:
+  category_public_tracker:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/generated/category-public-tracker.yaml
+    interval: 86400
+    path: ./ruleset/category_public_tracker.yaml
+  iran_ads:
+    type: http
+    behavior: domain
+    url: https://github.com/bootmortis/iran-hosted-domains/releases/latest/download/clash_rules_ads.yaml
+    interval: 86400
+    path: ./ruleset/iran_ads.yaml
+  PersianBlocker:
+    type: http
+    behavior: domain
+    url: "https://github.com/MasterKia/iran-hosted-domains/releases/latest/download/clash_rules_ads.yaml"
+    path: ./ruleset/PersianBlocker.yaml
+    interval: 86400
+  youtube:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/generated/youtube.yaml
+    interval: 86400
+    path: ./ruleset/youtube.yaml
+  telegram:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/generated/telegram.yaml
+    interval: 86400
+    path: ./ruleset/telegram.yaml
+  twitch:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/generated/twitch.yaml
+    interval: 86400
+    path: ./ruleset/twitch.yaml
+  censor:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/clash_rules/main/censor.yaml
+    interval: 86400
+    path: ./ruleset/censor.yaml
+  local_ips:
+    type: http
+    behavior: ipcidr
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/generated/local-ips.yaml
+    interval: 86400
+    path: ./ruleset/local_ips.yaml
+  private:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/generated/private.yaml
+    interval: 86400
+    path: ./ruleset/private.yaml
+  category_ir:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/generated/category-ir.yaml
+    interval: 86400
+    path: ./ruleset/category_ir.yaml
+  iran:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/clash_rules/main/iran.yaml
+    interval: 86400
+    path: ./ruleset/iran.yaml
+  steam:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/clash_rules/main/steam.yaml
+    interval: 86400
+    path: ./ruleset/steam.yaml
+  game:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/clash_rules/refs/heads/main/game.yaml
+    interval: 86400
+    path: ./ruleset/game.yaml
+  category-games:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/refs/heads/generated/category-games.yaml
+    interval: 86400
+    path: ./ruleset/category-games.yaml
+  ir:
+    type: http
+    format: yaml
+    behavior: domain
+    url: "https://github.com/chocolate4u/Iran-clash-rules/releases/latest/download/ir.yaml"
+    path: ./ruleset/ir.yaml
+    interval: 86400
+  apps:
+    type: http
+    format: yaml
+    behavior: classical
+    url: "https://github.com/chocolate4u/Iran-clash-rules/releases/latest/download/apps.yaml"
+    path: ./ruleset/apps.yaml
+    interval: 86400
+  ircidr:
+    type: http
+    format: yaml
+    behavior: ipcidr
+    url: "https://github.com/chocolate4u/Iran-clash-rules/releases/latest/download/ircidr.yaml"
+    path: ./ruleset/ircidr.yaml
+    interval: 86400
+  irasn:
+    type: http
+    format: yaml
+    behavior: classical
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/irasn.yaml"
+    path: ./ruleset/irasn.yaml
+    interval: 86400
+  arvancloud:
+    type: http
+    format: yaml
+    behavior: ipcidr
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/arvancloud.yaml"
+    path: ./ruleset/arvancloud.yaml
+    interval: 86400
+  derakcloud:
+    type: http
+    format: yaml
+    behavior: ipcidr
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/derakcloud.yaml"
+    path: ./ruleset/derakcloud.yaml
+    interval: 86400
+  iranserver:
+    type: http
+    format: yaml
+    behavior: ipcidr
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/iranserver.yaml"
+    path: ./ruleset/iranserver.yaml
+    interval: 86400
+  parspack:
+    type: http
+    format: yaml
+    behavior: ipcidr
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/parspack.yaml"
+    path: ./ruleset/parspack.yaml
+    interval: 86400
+  malware:
+    type: http
+    format: yaml
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/malware.yaml"
+    path: ./ruleset/malware.yaml
+    interval: 86400
+  phishing:
+    type: http
+    format: yaml
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/phishing.yaml"
+    path: ./ruleset/phishing.yaml
+    interval: 86400
+  cryptominers:
+    type: http
+    format: yaml
+    behavior: domain
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/cryptominers.yaml"
+    path: ./ruleset/cryptominers.yaml
+    interval: 86400
+  ads:
+    type: http
+    format: yaml
+    behavior: domain
+    url: "https://github.com/Chocolate4U/Iran-clash-rules/releases/download/202606060815/category-ads-all.yaml"
+    path: ./ruleset/ads.yaml
+    interval: 86400
+  DownloadManagers:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/clash_rules/refs/heads/main/DownloadManagers.yaml
+    interval: 86400
+    path: ./ruleset/DownloadManagers.yaml
+  BanProgramAD:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/list/BanProgramAD.yaml
+    interval: 86400
+    path: ./ruleset/BanProgramAD.yaml
+  BanAD:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/list/BanAD.yaml
+    interval: 86400
+    path: ./ruleset/BanAD.yaml
+  PrivateTracker:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/list/PrivateTracker.yaml
+    interval: 86400
+    path: ./ruleset/PrivateTracker.yaml
+  BanEasyList:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/list/BanEasyList.yaml
+    interval: 86400
+    path: ./ruleset/BanEasyList.yaml
+  Download:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/list/Download.yaml
+    interval: 86400
+    path: ./ruleset/Download.yaml
+  GameDownload:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/list/GameDownload.yaml
+    interval: 86400
+    path: ./ruleset/GameDownload.yaml
+  SteamRegionCheck:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/list/SteamRegionCheck.yaml
+    interval: 86400
+    path: ./ruleset/SteamRegionCheck.yaml
+  Xbox:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/list/Xbox.yaml
+    interval: 86400
+    path: ./ruleset/Xbox.yaml
+  YouTubeMusic:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/list/YouTubeMusic.yaml
+    interval: 86400
+    path: ./ruleset/YouTubeMusic.yaml
+  YouTube:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/list/YouTube.yaml
+    interval: 86400
+    path: ./ruleset/YouTube.yaml
+  Ponzi:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/Ponzi.yaml
+    interval: 86400
+    path: ./ruleset/Ponzi.yaml
+  warninglist:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/warning-list.yaml
+    interval: 86400
+    path: ./ruleset/warninglist.yaml
+  google:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/refs/heads/generated/google.yaml
+    interval: 86400
+    path: ./ruleset/google.yaml
+  google-play:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/refs/heads/generated/google-play.yaml
+    interval: 86400
+    path: ./ruleset/google-play.yaml
+  xiaomi_block_list:
+    type: http
+    format: yaml
+    behavior: domain
+    url: "https://raw.githubusercontent.com/10ium/clash_rules/refs/heads/main/xiaomi_block_list.yaml"
+    path: ./ruleset/xiaomi_block_list.yaml
+    interval: 86400
+  xiaomi_white_list:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/10ium/clash_rules/refs/heads/main/xiaomi_white_list.yaml"
+    path: ./ruleset/xiaomi_white_list.yaml
+    interval: 86400
+  cloudflare:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/refs/heads/generated/cloudflare.yaml
+    interval: 86400
+    path: ./ruleset/cloudflare.yaml
+  github:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/refs/heads/generated/github.yaml
+    interval: 86400
+    path: ./ruleset/xgithub.yaml
+  whatsapp:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/generated/whatsapp.yaml
+    interval: 86400
+    path: ./ruleset/whatsapp.yaml
+  LiteAds:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/10ium/clash_rules/refs/heads/main/LiteAds.yaml"
+    path: ./ruleset/LiteAds.yaml
+    interval: 86400
+  discord:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/10ium/clash_rules/refs/heads/main/discord.yaml"
+    path: ./ruleset/discord.yaml
+    interval: 86400
+  instagram:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/refs/heads/generated/instagram.yaml
+    interval: 86400
+    path: ./ruleset/instagram.yaml
+  category-ai:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/refs/heads/generated/category-ai-!cn.yaml
+    interval: 86400
+    path: ./ruleset/category-ai.yaml
+  stremio:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/10ium/clash_rules/refs/heads/main/stremio.yaml"
+    path: ./ruleset/stremio.yaml
+    interval: 86400
+  windows:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/10ium/clash_rules/refs/heads/main/windows.yaml"
+    path: ./ruleset/windows.yaml
+    interval: 86400
+  Chotwitter:
+    type: http
+    format: yaml
+    behavior: ipcidr
+    url: "https://raw.githubusercontent.com/Chocolate4U/Iran-clash-rules/release/twitter.yaml"
+    path: ./ruleset/Chotwitter.yaml
+    interval: 86400
+  mihTwitter:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/list/Twitter.yaml"
+    path: ./ruleset/mihTwitter.yaml
+    interval: 86400
+  Domtwitter:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/refs/heads/generated/twitter.yaml
+    interval: 86400
+    path: ./ruleset/Domtwitter.yaml
+  DomainSpotify:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/V2rayDomains2Clash/refs/heads/generated/spotify.yaml
+    interval: 86400
+    path: ./ruleset/DomainSpotify.yaml
+  mihspotify:
+    type: http
+    behavior: domain
+    url: https://raw.githubusercontent.com/10ium/mihomo_rule/refs/heads/main/list/Spotify.yaml
+    interval: 86400
+    path: ./ruleset/mihSpotify.yaml
+
+proxies:
+  - name: Ettehadvpn | 2
+    type: ss
+    server: 82.38.31.208
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: 🥀@amir_webstudio🥀
+    type: vless
+    server: 18.192.50.101
+    port: 443
+    uuid: 3f3bb5cc-da8b-4551-8b76-ba223f1a5255
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 42
+    type: ss
+    server: 82.38.31.208
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b"
+    type: ss
+    server: 193.29.139.217
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: QCXDxuDlTTMD7jtgHUjIoj
+    skip-cert-verify: true
+    udp: true
+  - name: "کانال تلگرام ما: @configM"
+    type: vless
+    server: 18.192.50.101
+    port: 443
+    uuid: 3f3bb5cc-da8b-4551-8b76-ba223f1a5255
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 19
+    type: ss
+    server: 82.38.31.208
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: BAMANETORG
+    type: vless
+    server: tmqlxpzrycnkjfdbhgvw.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: BAMANETORG_1
+    type: vless
+    server: ckjfmbhgdqzvxwplyrnt.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: BAMANETORG_2
+    type: vless
+    server: xyzkpwlrqvnmcbhjfdgs.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: BAMANETORG_3
+    type: vless
+    server: vbnmmkjdhdqzvxwplyrn.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 🇸🇨 Seychelles 🍓 @xixv2ray
+    type: vless
+    server: 45.130.125.194
+    port: 8443
+    uuid: 2d11f9a7-5cb9-4a76-acbe-0064305b570a
+    network: http
+    servername: vi.new-persian-song.ir
+    tls: true
+    client-fingerprint: chrome
+    http-opts:
+      path:
+        - /?ed=2053
+    skip-cert-verify: true
+    udp: true
+  - name: 🇳🇱51667 | ⚡️Telegram = t.me/SOSkeyNET
+    type: ss
+    server: 82.38.31.218
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 29
+    type: vless
+    server: 188.114.97.6
+    port: 443
+    uuid: 13030bb9-1d8d-41f4-c012-a390089f5d97
+    network: http
+    servername: hello.aihoshbartar.ir
+    tls: true
+    client-fingerprint: chrome
+    http-opts:
+      path:
+        - /
+      headers:
+        Host:
+          - hello.aihoshbartar.ir
+    skip-cert-verify: true
+    udp: true
+  - name: BegzarVPN - 1
+    type: vless
+    server: xyzkpwlrqvnmcbhjfdgs.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: BegzarVPN - 6
+    type: vless
+    server: bvtcxzpqwkljfhdsnyrm.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 28
+    type: vless
+    server: 45.130.125.194
+    port: 8443
+    uuid: d3d046fa-d372-430a-8ed9-083d62c44efb
+    network: http
+    servername: vip.mojaz-persian-music.ir
+    tls: true
+    client-fingerprint: chrome
+    http-opts:
+      path:
+        - /?ed=2053
+    skip-cert-verify: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل"
+    type: ss
+    server: series-a1.samanehha.co
+    port: 443
+    cipher: chacha20-ietf-poly1305
+    password: W74XFALLLuw6m5IA
+    skip-cert-verify: true
+    udp: true
+  - name: 🎇Tel-@V2rayAlpha--13
+    type: ss
+    server: series-a1.samanehha.co
+    port: 443
+    cipher: chacha20-ietf-poly1305
+    password: W74XFALLLuw6m5IA
+    skip-cert-verify: true
+    udp: true
+  - name: BegzarVPN - 2
+    type: vless
+    server: tmqlxpzrycnkjfdbhgvw.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: BegzarVPN - 5
+    type: vless
+    server: lzpxrntcvbyjhdfskmwq.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: BegzarVPN - 3
+    type: vless
+    server: vbnmmkjdhdqzvxwplyrn.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 10
+    type: ss
+    server: 91.107.191.12
+    port: 54471
+    cipher: 2022-blake3-aes-256-gcm
+    password: DT0mi59V4a9Se9EhyonyuptVfIe3oJpIrzD/fa8W17U=:SCf6cuqPneaNwCOKzYkOnETfih1RCUc6kRio2hPyDng=
+    skip-cert-verify: true
+    udp: true
+  - name: "@filembad`"
+    type: vless
+    server: 91.107.191.12
+    port: 29376
+    uuid: 03bc875d-0d8e-49b6-9094-89a8159e65ee
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: BegzarVPN - 4
+    type: vless
+    server: ckjfmbhgdqzvxwplyrnt.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 1
+    type: vless
+    server: zcvbnmkfjdhlpwqxrytz.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: BAMANETORG_4
+    type: vless
+    server: xzkpjrmtnvbcyfhdslqw.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 14
+    type: vless
+    server: 46.229.243.133
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn3-87.vk-cdnvideo.com
+    tls: true
+    skip-cert-verify: true
+    udp: true
+  - name: 💥@amir_webstudio💥
+    type: trojan
+    server: 84.234.31.111
+    port: 443
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: "@filterboro🇨🇭(9)"
+    type: trojan
+    server: 84.234.31.111
+    port: 2083
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: 🎇Tel-@V2rayAlpha--11
+    type: vless
+    server: 85.208.139.98
+    port: 8444
+    uuid: c931f737-cafe-4e4f-998a-a65517941256
+    servername: cdnjs.com
+    tls: true
+    flow: xtls-rprx-vision
+    reality-opts:
+      public-key: Hp6K5hsiPY4_zATgAtef9YTxNGpSkhAHTTo9MUO7fik
+      short-id: 77e934f68f02ab4c
+    skip-cert-verify: true
+    udp: true
+  - name: "@filterboro🇨🇭(2)"
+    type: trojan
+    server: 84.234.29.189
+    port: 1040
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_1"
+    type: vless
+    server: 151.115.164.134
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 10_1
+    type: vless
+    server: nid2.pink-perfect.ru
+    port: 443
+    uuid: 5d8fcd24-9634-4dd7-845c-3dc2d6291942
+    servername: nid2.pink-perfect.ru
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: qq
+    reality-opts:
+      public-key: DS9mX6cMb5wvwFzga8yN2NLbs7soXM7038_P23yPKwk
+      short-id: 8ffa160e608bf539
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 2_1
+    type: vless
+    server: 51.195.116.82
+    port: 443
+    uuid: 21c25bef-eb3b-44a8-9b26-fa7f674e5bfc
+    servername: speedtest.net
+    tls: true
+    flow: xtls-rprx-vision
+    reality-opts:
+      public-key: RWE5ORdQ2SzuFWX8DlaRP415wbhee9ynJkqC7yFPgQw
+      short-id: d13ddfca12760d03
+    skip-cert-verify: true
+    udp: true
+  - name: 🇨🇭 | 🍓@xixv2ray
+    type: vless
+    server: bypass.ch-gt-01.com
+    port: 8443
+    uuid: 4fdec620-73bb-40a7-a8d5-2570a59f1832
+    servername: storage.yandex.net
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: firefox
+    reality-opts:
+      public-key: 8qHRGcCezzSu4S-Cz9l19BNRLWm4MkaSwZV3dNrLEwc
+      short-id: d515d6cfdfe60b02
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 37
+    type: vless
+    server: 51.195.116.82
+    port: 443
+    uuid: 21c25bef-eb3b-44a8-9b26-fa7f674e5bfc
+    servername: speedtest.net
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: RWE5ORdQ2SzuFWX8DlaRP415wbhee9ynJkqC7yFPgQw
+      short-id: d13ddfca12760d03
+    skip-cert-verify: true
+    udp: true
+  - name: "@filterboro🇨🇭(6)"
+    type: trojan
+    server: 84.234.31.111
+    port: 443
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: 🇸🇨 Seychelles 🍓 @xixv2ray_1
+    type: vless
+    server: 45.130.125.194
+    port: 8443
+    uuid: d3d046fa-d372-430a-8ed9-083d62c44efb
+    network: http
+    servername: vip.mojaz-persian-music.ir
+    tls: true
+    client-fingerprint: chrome
+    http-opts:
+      path:
+        - /?ed=2053
+    skip-cert-verify: true
+    udp: true
+  - name: "@filterboro🇨🇭(8)"
+    type: trojan
+    server: 84.234.31.111
+    port: 2053
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: 💫@amir_webstudio💫
+    type: vless
+    server: 217.179.221.234
+    port: 24986
+    uuid: 40e32120-08c8-4a48-aa0b-156b653f364f
+    network: httpupgrade
+    tls: false
+    http-opts:
+      path:
+        - /
+      headers:
+        Host:
+          - mci.ir
+    skip-cert-verify: true
+    udp: true
+  - name: "@confingmg"
+    type: vless
+    server: sca14.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: BegzarVPN - 9
+    type: vless
+    server: nnxbvccxyzrktjplzmqw.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 10_2
+    type: vless
+    server: metro.xwhiteness.site
+    port: 443
+    uuid: 73a27a6d-a111-4576-a6b3-e8594aeac2f2
+    servername: metro.xwhiteness.site
+    tls: true
+    flow: xtls-rprx-vision
+    reality-opts:
+      public-key: teTMlvVIvxF6Zz_UA0GSf0medlqkJfambJFcnXCE3Dg
+    skip-cert-verify: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_2"
+    type: trojan
+    server: 84.234.31.111
+    port: 1040
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_3"
+    type: vless
+    server: sca15.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_4"
+    type: vless
+    server: 193.23.222.99
+    port: 55152
+    uuid: 827466ba-0910-4c48-b156-2f37fdbda362
+    servername: cloudflare.com
+    tls: true
+    flow: xtls-rprx-vision
+    reality-opts:
+      public-key: fX2XkujtqhnkQDy-Lwgqm_OofDs1qO5ytvVNM6aV4C4
+      short-id: ddcac8ed
+    skip-cert-verify: true
+    udp: true
+  - name: "@filterboro🇨🇭(7)"
+    type: trojan
+    server: 84.234.31.111
+    port: 1040
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_5"
+    type: trojan
+    server: 188.213.130.61
+    port: 2053
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: 🦁☀️@varkana0
+    type: trojan
+    server: 84.234.29.189
+    port: 443
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: 🇨🇭Ettehadvpn | 13
+    type: trojan
+    server: 188.213.130.61
+    port: 443
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: Ettehadvpn | 9
+    type: trojan
+    server: 188.213.130.61
+    port: 2083
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: ✅سرورهایبیشتردرکانال:prro
+    type: trojan
+    server: 84.234.29.189
+    port: 443
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: "@Cooonfig(🌱ژیک👸)"
+    type: vless
+    server: 188.114.97.6
+    port: 443
+    uuid: c6644bbe-5a62-41da-99a9-c5b78effcc6d
+    network: http
+    servername: mahsa67.manhamunamkeyeruz.ir
+    tls: true
+    client-fingerprint: firefox
+    http-opts:
+      path:
+        - /vsAJWsN
+      headers:
+        Host:
+          - mahsa67.manhamunamkeyeruz.ir
+    skip-cert-verify: true
+    udp: true
+  - name: BAMANETORG_5
+    type: vless
+    server: nnxbvccxyzrktjplzmqw.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 🎇Tel-@V2rayAlpha--19
+    type: vless
+    server: 77.74.123.163
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn3-87.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: 🔘Tel-@V2rayAlpha--21
+    type: vless
+    server: 77.74.123.165
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn3-87.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 23
+    type: trojan
+    server: 185.18.250.252
+    port: 443
+    password: humanity
+    sni: www.multiplydose.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+    udp: true
+  - name: Ettehadvpn | 37_1
+    type: vless
+    server: sca8.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 🔘Tel-@V2rayAlpha--19
+    type: trojan
+    server: 185.18.250.252
+    port: 443
+    password: humanity
+    sni: www.calmlunch.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.calmlunch.com
+    udp: true
+  - name: Ettehadvpn | 8
+    type: vless
+    server: 151.115.166.43
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 8_1
+    type: vless
+    server: fin.pink-perfect.ru
+    port: 443
+    uuid: 5d8fcd24-9634-4dd7-845c-3dc2d6291942
+    servername: www.google.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: qq
+    reality-opts:
+      public-key: 2fgsbEAn-ALVpjnE4ZTPrzaZY70vVplYwldCnslInE0
+      short-id: 86b80f1e713a33ad
+    skip-cert-verify: true
+    udp: true
+  - name: 🖤Tel:@Varkana0-1
+    type: vless
+    server: sca23.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 39
+    type: ss
+    server: 108.181.58.239
+    port: 8388
+    cipher: chacha20-ietf-poly1305
+    password: CJmTCCx7Ltud
+    skip-cert-verify: true
+    udp: true
+  - name: 🇳🇱NL  ROSE—13
+    type: ss
+    server: 82.38.31.218
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: "🛰️ Channel : @NitruStore"
+    type: vless
+    server: 188.114.97.6
+    port: 2053
+    uuid: 48a03d12-e258-40b4-bab0-7c9e6a2ffdf7
+    network: http
+    servername: ilovequran-iloveislam.mgwarrior.ir
+    tls: true
+    client-fingerprint: chrome
+    http-opts:
+      path:
+        - /MGv2rayOfficial-MGv2rayOfficial-MGv2rayOfficial-MGv2rayOfficial-MGv2rayOfficial-MGv2rayOfficial-MGv2rayOfficial-MGv2rayOfficial-MGv2rayOfficial-MGv2rayOfficial-MGv2rayOfficial-MGv2rayOfficial?ed=1024
+      headers:
+        Host:
+          - ilovequran-iloveislam.mgwarrior.ir
+    skip-cert-verify: true
+    udp: true
+  - name: 🎇Tel-@V2rayAlpha--6
+    type: vless
+    server: 18.192.50.101
+    port: 443
+    uuid: 3f3bb5cc-da8b-4551-8b76-ba223f1a5255
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 🇧🇻 Ettehadvpn | 39
+    type: trojan
+    server: 185.18.250.252
+    port: 443
+    password: humanity
+    sni: www.multiplydose.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+    udp: true
+  - name: 🎇Tel-@V2rayAlpha--8
+    type: vless
+    server: 31.76.39.21
+    port: 443
+    uuid: 9778a597-c81f-4459-9754-140b2ba8f784
+    network: http
+    servername: 5post-gate.x5.ru
+    tls: true
+    client-fingerprint: chrome
+    http-opts:
+      path:
+        - /xhttp-proxy
+    reality-opts:
+      public-key: akcAXaW7GNwXT6bTrtD6oZIY9rdEzW4TfZvYqDRzsTc
+      short-id: a8f3c1d7e9b4c2f6
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 26
+    type: vless
+    server: 66.81.247.248
+    port: 443
+    uuid: fc965ad9-bdd7-4815-ad71-b39ec5972dc1
+    network: ws
+    servername: octopusss4.com
+    tls: true
+    ws-opts:
+      path: /tsghdws
+      headers:
+        Host: octopusss4.com
+    skip-cert-verify: true
+    udp: true
+  - name: "@v2FreeHub 🇦🇪"
+    type: ss
+    server: 130.49.161.18
+    port: 28474
+    cipher: chacha20-ietf-poly1305
+    password: _TusuE5i0EzyvWsQuTiKMMr_j_sduu2E
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 32
+    type: trojan
+    server: 188.114.97.6
+    port: 443
+    password: humanity
+    sni: www.calmlunch.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.calmlunch.com
+    udp: true
+  - name: 🇬🇧filterboro(4)
+    type: vless
+    server: uk.riotvpn.eu
+    port: 443
+    uuid: eecbcbb9-b770-40cd-ab7b-50c68a19595d
+    servername: ads.x5.ru
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: 8h8t5eBWL9oERK7xWHQLFJE5j6sZdgNDQAs3EGnNbho
+      short-id: 2f49bccf11150ef2
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 5
+    type: vless
+    server: de.pink-perfect.ru
+    port: 443
+    uuid: 5d8fcd24-9634-4dd7-845c-3dc2d6291942
+    servername: www.google.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: qq
+    reality-opts:
+      public-key: 2fgsbEAn-ALVpjnE4ZTPrzaZY70vVplYwldCnslInE0
+      short-id: 86b80f1e713a33ad
+    skip-cert-verify: true
+    udp: true
+  - name: 🔘Tel-@V2rayAlpha--3
+    type: vless
+    server: 152.233.35.228
+    port: 8443
+    uuid: 394f6981-a782-4779-9a85-e6cf22935d93
+    servername: de1.fromblancwithlove.com
+    tls: true
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 36
+    type: vless
+    server: 188.114.97.6
+    port: 443
+    uuid: fc965ad9-bdd7-4815-ad71-b39ec5972dc1
+    network: ws
+    servername: octopusss4.com
+    tls: true
+    client-fingerprint: chrome
+    ws-opts:
+      path: /tsghdws
+      headers:
+        Host: octopusss4.com
+    skip-cert-verify: true
+    udp: true
+  - name: BAMANETORG_6
+    type: vless
+    server: hjfsdklpqwzzxcvbnmry.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 🇨🇦 Canada 🍓 @xixv2ray
+    type: vless
+    server: hyst.purplrose.ir
+    port: 8443
+    uuid: 5e042049-f74d-4ccc-a3ac-db27bca2ce99
+    network: ws
+    servername: bastani.purplrose.ir
+    tls: true
+    client-fingerprint: random
+    ws-opts:
+      headers:
+        Host: bastani.purplrose.ir
+    skip-cert-verify: true
+    udp: true
+  - name: 🇨🇦 Canada 🍓 @xixv2ray_1
+    type: trojan
+    server: 188.114.97.6
+    port: 443
+    password: mitivpn
+    sni: mitivpn.dAsh.ss.ssadsczdx.globcal.ssl.fastly.net.b5r.ir
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: https://chatgpt.com
+      headers:
+        Host: de.e-mitivpn.global.ssl.b5r.ir
+    udp: true
+  - name: BAMANETORG_7
+    type: vless
+    server: lzpxrntcvbyjhdfskmwq.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: "@Nftvici"
+    type: vless
+    server: cdn7-39.vk-cdnvideo.com
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: "***🛸***@V2ray_official"
+    type: trojan
+    server: 185.18.250.252
+    port: 443
+    password: humanity
+    sni: www.calmlunch.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.calmlunch.com
+    udp: true
+  - name: Ettehadvpn | 37_2
+    type: vless
+    server: fin.pink-perfect.ru
+    port: 443
+    uuid: 5d8fcd24-9634-4dd7-845c-3dc2d6291942
+    servername: www.google.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: qq
+    reality-opts:
+      public-key: 2fgsbEAn-ALVpjnE4ZTPrzaZY70vVplYwldCnslInE0
+      short-id: 86b80f1e713a33ad
+    skip-cert-verify: true
+    udp: true
+  - name: "@Filtershekan_channel |8"
+    type: vless
+    server: 193.232.178.78
+    port: 443
+    uuid: Telegram-Modvpn7
+    network: ws
+    tls: false
+    ws-opts:
+      path: /
+    skip-cert-verify: true
+    udp: true
+  - name: V2RAYENGLISH@✨
+    type: vless
+    server: 91.107.191.12
+    port: 29376
+    uuid: 03bc875d-0d8e-49b6-9094-89a8159e65ee
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 🎇Tel-@V2rayAlpha--9
+    type: vless
+    server: sca31.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 🔘Tel-@V2rayAlpha--13
+    type: vless
+    server: 82.29.128.252
+    port: 443
+    uuid: f90099ab-bbb9-4d68-824b-edca0ea32cf1
+    network: http
+    servername: www.amd.com
+    tls: true
+    client-fingerprint: edge
+    http-opts:
+      path:
+        - /
+    reality-opts:
+      public-key: FoCmMBurpqNaVQWlRvyuS1um0ftKxXMnnKNbnHpe-G8
+    skip-cert-verify: true
+    udp: true
+  - name: "کانال تلگرام ما: @configM_1"
+    type: vless
+    server: 46.229.243.133
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn3-87.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: 🌼@amir_webstudio🌼
+    type: vless
+    server: 151.115.164.120
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 📀16@oneclickvpnkeys
+    type: vless
+    server: 91.107.191.12
+    port: 29376
+    uuid: 03bc875d-0d8e-49b6-9094-89a8159e65ee
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 💎👑 𝗥𝗢𝗬𝗔𝗟 👑💎
+    type: trojan
+    server: 185.18.250.252
+    port: 443
+    password: humanity
+    sni: www.multiplydose.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.multiplydose.com
+    udp: true
+  - name: Ettehadvpn | 16
+    type: trojan
+    server: 104.16.174.12
+    port: 443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.ignitelimit.com
+    udp: true
+  - name: Ettehadvpn | 36_1
+    type: vless
+    server: 77.110.115.192
+    port: 443
+    uuid: 5d8fcd24-9634-4dd7-845c-3dc2d6291942
+    servername: www.google.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: qq
+    reality-opts:
+      public-key: 2fgsbEAn-ALVpjnE4ZTPrzaZY70vVplYwldCnslInE0
+      short-id: 86b80f1e713a33ad
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 17
+    type: trojan
+    server: 104.16.174.12
+    port: 443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.ignitelimit.com
+    udp: true
+  - name: Ettehadvpn | 7
+    type: vless
+    server: 91.107.191.12
+    port: 29376
+    uuid: 03bc875d-0d8e-49b6-9094-89a8159e65ee
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: "@vasl_bashim نه"
+    type: trojan
+    server: 213.165.45.14
+    port: 8443
+    password: SoftNetConnect
+    sni: www.yahoo.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: "@filembad`_1"
+    type: trojan
+    server: 104.16.174.12
+    port: 443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.ignitelimit.com
+    udp: true
+  - name: 🔘Tel-@V2rayAlpha--17
+    type: vless
+    server: 188.114.97.6
+    port: 443
+    uuid: Telegram-Parsashonam-12
+    network: ws
+    servername: cdn.limoo.blog
+    tls: true
+    client-fingerprint: chrome
+    ws-opts:
+      path: /
+      headers:
+        Host: cdn.limoo.blog
+    skip-cert-verify: true
+    udp: true
+  - name: BegzarVPN - 8
+    type: vless
+    server: xzkpjrmtnvbcyfhdslqw.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 🇳🇱50629 | ⚡️Telegram = t.me/SOSkeyNET
+    type: ss
+    server: 193.29.139.217
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: QCXDxuDlTTMD7jtgHUjIoj
+    skip-cert-verify: true
+    udp: true
+  - name: 🇹🇷Tel:@Varkana0
+    type: vless
+    server: sca10.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 🏅@amir_webstudio🏅
+    type: vless
+    server: de.pink-perfect.ru
+    port: 443
+    uuid: 5d8fcd24-9634-4dd7-845c-3dc2d6291942
+    servername: www.google.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: qq
+    reality-opts:
+      public-key: 2fgsbEAn-ALVpjnE4ZTPrzaZY70vVplYwldCnslInE0
+      short-id: 86b80f1e713a33ad
+    skip-cert-verify: true
+    udp: true
+  - name: 🇨🇦 Canada 🍓 @xixv2ray_2
+    type: vless
+    server: 188.114.97.6
+    port: 443
+    uuid: 5e0212f0-297f-4f68-a256-013466bab0d2
+    network: ws
+    servername: t4.tzteam.online
+    tls: true
+    client-fingerprint: firefox
+    ws-opts:
+      path: /?ed=2048
+      headers:
+        Host: t4.tzteam.online
+    skip-cert-verify: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_6"
+    type: ss
+    server: 82.38.31.210
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: 🇬🇧51501 | ⚡️Telegram = t.me/SOSkeyNET
+    type: vless
+    server: 31.76.91.26
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 15
+    type: vless
+    server: 18.192.50.101
+    port: 443
+    uuid: 3f3bb5cc-da8b-4551-8b76-ba223f1a5255
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 2_2
+    type: trojan
+    server: 84.234.31.111
+    port: 1040
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: 🇬🇧51317 | ⚡️Telegram = t.me/SOSkeyNET
+    type: vless
+    server: 31.76.91.7
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 5_1
+    type: vless
+    server: 77.74.123.165
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn3-87.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_1"
+    type: vless
+    server: 31.76.91.31
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: "@IranProxyPlus`"
+    type: vless
+    server: 31.76.91.17
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: 🇬🇧51150 | ⚡️Telegram = t.me/SOSkeyNET
+    type: vless
+    server: 31.76.91.10
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: 🇬🇧51316 | ⚡️Telegram = t.me/SOSkeyNET
+    type: vless
+    server: 31.76.91.34
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: 🔘Tel-@V2rayAlpha--25
+    type: trojan
+    server: 188.114.97.6
+    port: 443
+    password: YZSfMMqKIC
+    sni: dd.aananas.ir.
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /?ed=2048
+    udp: true
+  - name: "@filembad`_2"
+    type: vless
+    server: 31.76.91.32
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b`"
+    type: vless
+    server: 31.76.91.26
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: 🔘Tel-@V2rayAlpha--9
+    type: vless
+    server: 46.229.243.132
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn7-39.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 30
+    type: trojan
+    server: 45.130.125.96
+    port: 443
+    password: humanity
+    sni: www.calmloud.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.calmloud.com
+    udp: true
+  - name: "***✅***@AR14N24b_2"
+    type: vless
+    server: 31.76.91.34
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: BegzarVPN - 7
+    type: vless
+    server: hjfsdklpqwzzxcvbnmry.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: "@meliproxyy"
+    type: vless
+    server: 31.76.91.7
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: "@filembad`_3"
+    type: vless
+    server: 31.76.91.7
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: "***🛸***@V2ray_official_1"
+    type: vless
+    server: 31.76.91.7
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b`_1"
+    type: vless
+    server: 31.76.91.7
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b`_2"
+    type: vless
+    server: 31.76.91.32
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 18
+    type: ss
+    server: 82.38.31.179
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: "@filembad`_4"
+    type: vless
+    server: 31.76.91.7
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: 🇬🇧51211 | ⚡️Telegram = t.me/SOSkeyNET
+    type: vless
+    server: 31.76.91.32
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 25
+    type: vless
+    server: 38.107.233.130
+    port: 443
+    uuid: 5d8fcd24-9634-4dd7-845c-3dc2d6291942
+    servername: www.google.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: qq
+    reality-opts:
+      public-key: 2fgsbEAn-ALVpjnE4ZTPrzaZY70vVplYwldCnslInE0
+      short-id: 86b80f1e713a33ad
+    skip-cert-verify: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_7"
+    type: ss
+    server: 82.38.31.184
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 27
+    type: vless
+    server: sca17.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 38
+    type: vmess
+    server: 172.233.17.76
+    port: 22324
+    uuid: 04621bae-ab36-11ec-b909-0242ac120002
+    alterId: 0
+    cipher: auto
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 10_3
+    type: trojan
+    server: 188.114.97.6
+    port: 443
+    password: humanity
+    sni: www.calmlunch.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.calmlunch.com
+    udp: true
+  - name: Ettehadvpn | 25_1
+    type: vless
+    server: 151.101.65.57
+    port: 80
+    uuid: 96eec36e-2c44-5b09-898e-6f0f0526e57f
+    network: http
+    tls: false
+    http-opts:
+      path:
+        - /login
+      headers:
+        Host:
+          - shangulin.global.ssl.fastly.net
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 6
+    type: vless
+    server: 31.56.28.52
+    port: 46574
+    uuid: 27cab83e-e48c-467a-a641-32eb070c03ac
+    network: httpupgrade
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_3"
+    type: ss
+    server: 82.38.31.218
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_4"
+    type: ss
+    server: r3mrcg001286ek2.cybervena.com
+    port: 50099
+    cipher: chacha20-ietf-poly1305
+    password: 7e731ec3-f8e1-43f6-92cf-3978d14705c4
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 13
+    type: trojan
+    server: 104.18.152.229
+    port: 443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.ignitelimit.com
+    udp: true
+  - name: 🎇Tel-@V2rayAlpha--16
+    type: ss
+    server: 82.38.31.208
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: "@Filtershekan_channel |28"
+    type: vless
+    server: 151.101.129.57
+    port: 80
+    uuid: TIGNAL-CRYPTO
+    network: http
+    tls: false
+    http-opts:
+      path:
+        - /
+      headers:
+        Host:
+          - InternetAzadRobot07gt745.global.ssl.fastly.net
+    skip-cert-verify: true
+    udp: true
+  - name: 🇹🇼50636 | ⚡️Telegram = t.me/SOSkeyNET
+    type: ss
+    server: r3mrcg001286ek2.cybervena.com
+    port: 50099
+    cipher: chacha20-ietf-poly1305
+    password: 7e731ec3-f8e1-43f6-92cf-3978d14705c4
+    skip-cert-verify: true
+    udp: true
+  - name: "@filterboro🇨🇭(4)"
+    type: trojan
+    server: 188.213.130.61
+    port: 2083
+    password: Masir_Sefid
+    sni: store.steampowered.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: "🚩Tel : @SERVER_DNS"
+    type: vless
+    server: 188.114.97.6
+    port: 80
+    uuid: bf5d97e2-4321-4ed2-b95d-56f4b8cc1bc3
+    network: ws
+    tls: false
+    ws-opts:
+      path: /br-orcl
+      headers:
+        Host: space.byu.id.r3xxe.eu.cc
+    skip-cert-verify: true
+    udp: true
+  - name: 🇮🇹Ettehadvpn | 33
+    type: vless
+    server: 57.131.38.150
+    port: 9443
+    uuid: 476d4f2c-c5f9-4ae0-8241-2034cd7d403f
+    network: ws
+    servername: it.connfull.org
+    tls: true
+    client-fingerprint: ios
+    ws-opts:
+      path: /stream#@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL
+      headers:
+        Host: it.connfull.org
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 41
+    type: vless
+    server: sca15.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 🇨🇦51984 | ⚡️Telegram = t.me/SOSkeyNET
+    type: trojan
+    server: 104.16.174.12
+    port: 443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.ignitelimit.com
+    udp: true
+  - name: BAMANETORG_8
+    type: vless
+    server: bvtcxzpqwkljfhdsnyrm.kk.noafra.ir
+    port: 80
+    uuid: bg
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: ♾️67@oneclickvpnkeys
+    type: vless
+    server: cdg-1.fromblancwithlove.com
+    port: 8443
+    uuid: 55f7d143-a594-4a91-b030-f227039f85ef
+    servername: cdg-1.fromblancwithlove.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: "@V2ray_Alpha🦁 9"
+    type: trojan
+    server: 188.114.97.6
+    port: 443
+    password: humanity
+    sni: www.calmloud.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.calmloud.com
+    udp: true
+  - name: "***✅***@AR14N24b_5"
+    type: trojan
+    server: 104.16.174.12
+    port: 443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.ignitelimit.com
+    udp: true
+  - name: 🇬🇧filterboro(2)
+    type: vless
+    server: uk.riotvpn.eu
+    port: 443
+    uuid: e4daebd1-5215-48f3-9497-cf875c7cc750
+    servername: ads.x5.ru
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: 8h8t5eBWL9oERK7xWHQLFJE5j6sZdgNDQAs3EGnNbho
+      short-id: 2f49bccf11150ef2
+    skip-cert-verify: true
+    udp: true
+  - name: 🇫🇷Ettehadvpn | 40
+    type: vless
+    server: 45.12.30.95
+    port: 2086
+    uuid: 47f2f901-8f10-437d-871e-48f1d6550cf5
+    network: httpupgrade
+    tls: false
+    http-opts:
+      path:
+        - /
+      headers:
+        Host:
+          - beh4.salonemojallal.ir
+    skip-cert-verify: true
+    udp: true
+  - name: 🇨🇦51066 | ⚡️Telegram = t.me/SOSkeyNET
+    type: trojan
+    server: www.ignitelimit.com
+    port: 443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+    udp: true
+  - name: "***⚡***@V2ray_official"
+    type: vless
+    server: 45.130.125.218
+    port: 8443
+    uuid: 77e69c70-31b4-44ea-af46-4664df9a614c
+    network: http
+    servername: app5.dr-ping.com
+    tls: true
+    client-fingerprint: chrome
+    http-opts:
+      path:
+        - /DrPing_channel
+      headers:
+        Host:
+          - app5.dr-ping.com
+    skip-cert-verify: true
+    udp: true
+  - name: 🇨🇦 Canada 🍓 @xixv2ray_3
+    type: vless
+    server: 104.16.75.212
+    port: 443
+    uuid: 5ec3a039-ea63-4bf9-a848-a65c9bfa66f5
+    network: ws
+    servername: splash.ariyuz.org
+    tls: true
+    client-fingerprint: chrome
+    ws-opts:
+      path: /api/v1
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 42_1
+    type: trojan
+    server: 104.18.152.229
+    port: 443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.ignitelimit.com
+    udp: true
+  - name: MmDFreakKURd³@llFreak
+    type: vless
+    server: 188.114.97.6
+    port: 443
+    uuid: ddf41329-42d8-4266-9bc2-6fef34941a0b
+    network: ws
+    servername: dfsuporte.garena.com.ex33r.eu.cc
+    tls: true
+    ws-opts:
+      path: /sg-orcl
+      headers:
+        Host: dfsuporte.garena.com.ex33r.eu.cc
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 11
+    type: vless
+    server: cdn3-87.vk-cdnvideo.com
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn3-87.vk-cdnvideo.com
+    tls: true
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 44
+    type: trojan
+    server: 104.16.174.12
+    port: 443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.ignitelimit.com
+    udp: true
+  - name: Ettehadvpn | 46
+    type: vless
+    server: sca18.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: "🚩Tel : @SERVER_DNS_1"
+    type: vless
+    server: 188.114.97.6
+    port: 80
+    uuid: 35a11533-6fce-4459-b06c-77d0442c2021
+    network: ws
+    tls: false
+    ws-opts:
+      path: /nl-tw
+      headers:
+        Host: s.blibli.com.r3xxe.eu.cc
+    skip-cert-verify: true
+    udp: true
+  - name: 🌺@amir_webstudio🌺
+    type: vless
+    server: 141.98.118.70
+    port: 443
+    uuid: de64aaa6-a0ea-48d0-853b-1c3cbc7fb42c
+    network: http
+    servername: www.google.com
+    tls: true
+    client-fingerprint: random
+    http-opts:
+      path:
+        - /
+    reality-opts:
+      public-key: LjEQR0FEtsOs5eQoVsZgJX5ZI0yeadUKTCLoGD641RQ
+      short-id: "44"
+    skip-cert-verify: true
+    udp: true
+  - name: 🇯🇵52252 | ⚡️Telegram = t.me/SOSkeyNET
+    type: vless
+    server: 96.62.214.87
+    port: 29745
+    uuid: f6f44df3-d229-4dd8-a944-e7bc3a4c6b94
+    servername: www.google.com
+    tls: true
+    client-fingerprint: random
+    reality-opts:
+      public-key: zSOPQOHAiacl2VMETsLXTE_Gln5ECllb6YKy1oyv1V0
+      short-id: c3
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 39_1
+    type: vless
+    server: 130.12.242.102
+    port: 7443
+    uuid: 6ca8ea5b-e47f-4c19-adee-365456e1e87c
+    servername: www.microsoft.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: 5QAO98ot2U7TcGs_f6EEaQjCzNOJLNHqPf6smYsdFVI
+      short-id: d82fb387
+    skip-cert-verify: true
+    udp: true
+  - name: 🇮🇷 Iran 🍓 @xixv2ray
+    type: trojan
+    server: 2.144.21.112
+    port: 40443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.ignitelimit.com
+    udp: true
+  - name: 🇩🇪 Germany 🍓 @xixv2ray
+    type: vless
+    server: main.saforia.ru
+    port: 2086
+    uuid: b8c51058-4378-46d3-b2c9-50b43b5715a0
+    network: ws
+    tls: false
+    ws-opts:
+      path: /
+      headers:
+        Host: main.saforia.ru
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 5_2
+    type: ss
+    server: 82.38.31.186
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: "@MARAMBASHI  🇨🇦"
+    type: trojan
+    server: 172.64.152.23
+    port: 443
+    password: humanity
+    sni: www.calmlunch.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.calmlunch.com
+    udp: true
+  - name: 🇯🇵52251 | ⚡️Telegram = t.me/SOSkeyNET
+    type: vless
+    server: 96.62.214.87
+    port: 29745
+    uuid: f6f44df3-d229-4dd8-a944-e7bc3a4c6b94
+    servername: www.google.com
+    tls: true
+    client-fingerprint: random
+    reality-opts:
+      public-key: zSOPQOHAiacl2VMETsLXTE_Gln5ECllb6YKy1oyv1V0
+      short-id: c3
+    skip-cert-verify: true
+    udp: true
+  - name: T.me/CONFiGiR98🖐2
+    type: vless
+    server: blubank.ir
+    port: 80
+    uuid: afb3eb91-6ab7-4c70-874e-716e2481cb7d
+    network: ws
+    tls: false
+    ws-opts:
+      path: /
+      headers:
+        Host: vip.masterdadeh.ir
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_6"
+    type: vless
+    server: 96.62.214.87
+    port: 29745
+    uuid: f6f44df3-d229-4dd8-a944-e7bc3a4c6b94
+    servername: www.google.com
+    tls: true
+    client-fingerprint: random
+    reality-opts:
+      public-key: zSOPQOHAiacl2VMETsLXTE_Gln5ECllb6YKy1oyv1V0
+      short-id: c3
+    skip-cert-verify: true
+    udp: true
+  - name: "@Filtershekan_channel |26"
+    type: vless
+    server: 199.232.57.91
+    port: 80
+    uuid: InternetAzadRobot
+    network: http
+    tls: false
+    http-opts:
+      path:
+        - /TignaliSWithYou
+      headers:
+        Host:
+          - tignaltofan.global.ssl.fastly.net
+    skip-cert-verify: true
+    udp: true
+  - name: "@Filtershekan_channel |33"
+    type: vless
+    server: bm.xq-vpn.com
+    port: 80
+    uuid: FREE
+    network: http
+    tls: false
+    http-opts:
+      path:
+        - /
+      headers:
+        Host:
+          - SpEeDtEsT.nEt
+    skip-cert-verify: true
+    udp: true
+  - name: 🇮🇷 Iran 🍓 @xixv2ray_1
+    type: vless
+    server: 185.143.234.122
+    port: 80
+    uuid: 342cc065-f5dd-449d-8f27-02dcfd15130a
+    network: ws
+    tls: false
+    ws-opts:
+      path: /
+      headers:
+        Host: ivh.ziroxcompany.ir
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 31
+    type: vless
+    server: 152.233.35.228
+    port: 8443
+    uuid: 394f6981-a782-4779-9a85-e6cf22935d93
+    servername: de1.fromblancwithlove.com
+    tls: true
+    skip-cert-verify: true
+    udp: true
+  - name: DRA_NET_FREE@ - 1
+    type: trojan
+    server: 104.16.72.70
+    port: 443
+    password: 74480619-b6a8-4ab8-94e1-1132fc18b2fa
+    sni: unnes.ac.id.r3xxe.eu.cc
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /au-mt
+      headers:
+        Host: unnes.ac.id.r3xxe.eu.cc
+    udp: true
+  - name: 7🍅@ConfigX2ray
+    type: vless
+    server: 151.115.167.190
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 19_1
+    type: vless
+    server: 31.56.28.52
+    port: 23904
+    uuid: 27cab83e-e48c-467a-a641-32eb070c03ac
+    servername: www.sony.com
+    tls: true
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: RWFwpeAcTMHBg9BLTW7bdzQNW84M-KjM2_5CmaLJxRk
+      short-id: 6a
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 14_1
+    type: vless
+    server: 46.229.243.132
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn7-39.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: ♾️73@oneclickvpnkeys
+    type: trojan
+    server: ch-2.bexum.fun
+    port: 443
+    password: LYaEYwjN8LjWTRJdCCTzW7V6gK7atJVu
+    skip-cert-verify: true
+    tls: false
+    udp: true
+  - name: Ettehadvpn | 17_1
+    type: vless
+    server: 46.229.243.131
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn7-09.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 21
+    type: trojan
+    server: 185.18.250.252
+    port: 443
+    password: humanity
+    sni: www.multiplydose.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.multiplydose.com
+    udp: true
+  - name: Ettehadvpn | 47
+    type: vless
+    server: 162.249.126.76
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn7-09.vk-cdnvideo.com
+    tls: true
+    skip-cert-verify: true
+    udp: true
+  - name: ☀️🦁@varkana0
+    type: vless
+    server: cdn9-33.vk-cdnvideo.com
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn9-33.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: MmDFreakKURd²@llFreak
+    type: vless
+    server: 45.130.125.96
+    port: 443
+    uuid: 28607fa7-db30-47d6-942a-f5744e4be9ad
+    network: ws
+    servername: dfsuporte.garena.com.ex33r.eu.cc
+    tls: true
+    ws-opts:
+      path: /id-pusat
+      headers:
+        Host: dfsuporte.garena.com.ex33r.eu.cc
+    skip-cert-verify: true
+    udp: true
+  - name: "@filembad`_5"
+    type: trojan
+    server: 185.18.250.252
+    port: 443
+    password: humanity
+    sni: www.calmlunch.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.calmlunch.com
+    udp: true
+  - name: 🎇Tel-@V2rayAlpha--1
+    type: vless
+    server: 216.24.57.1
+    port: 443
+    uuid: 935bdfb3-7bf9-48c1-adcb-2f6fbfeca896
+    network: ws
+    servername: help.viu.com.ex33r.eu.cc
+    tls: true
+    ws-opts:
+      path: /my-mbv
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 23_1
+    type: vless
+    server: 54.36.162.217
+    port: 443
+    uuid: 44b3ee72-cffb-4d66-ab7c-3138b9bdeeef
+    servername: speedtest.net
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: upTVUrc_t7xF1ULni8pHRDhRES1sT4BDm1r8rugTzyQ
+      short-id: ff815f58c7e77aa9
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_7"
+    type: vless
+    server: 45.130.125.218
+    port: 8443
+    uuid: 77e69c70-31b4-44ea-af46-4664df9a614c
+    network: http
+    servername: app5.dr-ping.com
+    tls: true
+    client-fingerprint: chrome
+    http-opts:
+      path:
+        - /DrPing_channel
+      headers:
+        Host:
+          - app5.dr-ping.com
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 16_1
+    type: trojan
+    server: 188.114.97.6
+    port: 443
+    password: YZSfMMqKIC
+    sni: dd.aananas.ir.
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /?ed=2048
+    udp: true
+  - name: 🇫🇮 Finland 🍓 @xixv2ray
+    type: vless
+    server: s2.dipvpn.ru
+    port: 443
+    uuid: 3559f1f7-7d70-46c9-82db-d2b46269300b
+    servername: dipvpn.ru
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: 1BdgrQ_esOEya01sDCBYK4MGpJgaUhssHQG-aWJkyFQ
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 35
+    type: ss
+    server: 82.38.31.155
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: oZIoA69Q8yhcQV8ka3Pa3A
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 45
+    type: ss
+    server: 162.19.254.232
+    port: 2083
+    cipher: aes-256-gcm
+    password: 7NuB0Y5m3aNzkKMKlFoMwkiajsu6F36c9ok4VKEZnB4=
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_8"
+    type: vless
+    server: 31.76.91.23
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: "@vasl_bashim ⁴"
+    type: vless
+    server: 216.24.57.1
+    port: 443
+    uuid: 974c2588-c1cd-43ac-8823-ce3d879b09fd
+    network: ws
+    servername: somersby.pt.ex33r.eu.cc
+    tls: true
+    ws-opts:
+      path: /id-amz
+    skip-cert-verify: true
+    udp: true
+  - name: 🚀@amir_webstudio🚀
+    type: vless
+    server: 172.67.160.192
+    port: 8880
+    uuid: 07f78397-7217-4ff0-90b1-7544c723b211
+    network: httpupgrade
+    tls: false
+    http-opts:
+      path:
+        - /?ed=80
+      headers:
+        Host:
+          - alManjadId1.po0iU.ir.
+    skip-cert-verify: true
+    udp: true
+  - name: "🚩Tel : @SERVER_DNS_2"
+    type: vless
+    server: 188.114.97.6
+    port: 80
+    uuid: e89f9d3c-d924-4684-ad0e-a1e9d8c780e7
+    network: ws
+    tls: false
+    ws-opts:
+      path: /sg-amz
+      headers:
+        Host: unnes.ac.id.r3xxe.eu.cc
+    skip-cert-verify: true
+    udp: true
+  - name: قشاع☯️
+    type: vless
+    server: cdn7-39.vk-cdnvideo.com
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: "@filembad`_6"
+    type: trojan
+    server: 188.114.97.6
+    port: 443
+    password: humanity
+    sni: www.calmlunch.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.calmlunch.com
+    udp: true
+  - name: 🇮🇹Ettehadvpn | 11
+    type: vless
+    server: 57.131.38.150
+    port: 9443
+    uuid: 476d4f2c-c5f9-4ae0-8241-2034cd7d403f
+    network: ws
+    servername: it.connfull.org
+    tls: true
+    client-fingerprint: chrome
+    ws-opts:
+      path: /stream#@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL,@V2RAY_SPATIAL
+      headers:
+        Host: it.connfull.org
+    skip-cert-verify: true
+    udp: true
+  - name: 🌟@amir_webstudio🌟
+    type: vless
+    server: 23.26.37.120
+    port: 8443
+    uuid: dcba77d7-bb59-4802-b32c-37fd7011fca4
+    servername: google.com
+    tls: true
+    reality-opts:
+      public-key: upDCW94g-pSYQrmXvOrTVYlwBUrSKhYFF9QwrqObdVo
+      short-id: 3ca620a7ed5f3196
+    skip-cert-verify: true
+    udp: true
+  - name: "@Filtershekan_channel |32"
+    type: vless
+    server: 151.101.129.57
+    port: 80
+    uuid: TIGNAL-CRYPTO
+    network: http
+    tls: false
+    http-opts:
+      path:
+        - /
+      headers:
+        Host:
+          - InternetAzadRobot07gt745.global.ssl.fastly.net
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 7_1
+    type: vless
+    server: 213.176.16.179
+    port: 443
+    uuid: 82d47c52-9738-4d40-93a4-220bab575c60
+    network: grpc
+    servername: treng.loralden.com
+    tls: true
+    grpc-opts:
+      grpc-service-name: grpc
+    reality-opts:
+      public-key: EUK_ePvEKUGcezQYHqgJ5P462XxLPXPm9CZWGLaL33k
+      short-id: ed72a429f0135a3f
+    skip-cert-verify: true
+    udp: true
+  - name: 🔘Tel-@V2rayAlpha--7
+    type: vless
+    server: nid.pink-perfect.ru
+    port: 443
+    uuid: 5d8fcd24-9634-4dd7-845c-3dc2d6291942
+    servername: www.google.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: qq
+    reality-opts:
+      public-key: 2fgsbEAn-ALVpjnE4ZTPrzaZY70vVplYwldCnslInE0
+      short-id: 86b80f1e713a33ad
+    skip-cert-verify: true
+    udp: true
+  - name: 🇬🇧51310 | ⚡️Telegram = t.me/SOSkeyNET
+    type: vless
+    server: 31.76.91.23
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: 🇩🇪 Germany 🍓 @xixv2ray_1
+    type: vless
+    server: main.saforia.ru
+    port: 2086
+    uuid: b8c51058-4378-46d3-b2c9-50b43b5715a0
+    network: ws
+    tls: false
+    ws-opts:
+      path: /
+    skip-cert-verify: true
+    udp: true
+  - name: "@V2ray_Alpha🦁 7"
+    type: vless
+    server: cdn7-09.vk-cdnvideo.com
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn7-09.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: ♾️20@oneclickvpnkeys
+    type: vless
+    server: 79.127.196.11
+    port: 8443
+    uuid: 55f7d143-a594-4a91-b030-f227039f85ef
+    servername: cdg-1.fromblancwithlove.com
+    tls: true
+    skip-cert-verify: true
+    udp: true
+  - name: "@ConfigX2ray اخر"
+    type: vless
+    server: 144.31.131.33
+    port: 443
+    uuid: ae852d97-85f5-45cf-82a4-254eba345480
+    servername: cdn.cdnjst.org
+    tls: true
+    flow: xtls-rprx-vision
+    reality-opts:
+      public-key: djH9iD2QV748ocK-wPH7HvDd03lu88zHhS4G-61w6Dc
+      short-id: a120
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_9"
+    type: vless
+    server: 31.76.91.10
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 23_2
+    type: vless
+    server: 31.76.91.7
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 30_1
+    type: vless
+    server: 31.76.91.25
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: "@IranProxyPlus`_1"
+    type: vless
+    server: 79.127.196.11
+    port: 8443
+    uuid: 55f7d143-a594-4a91-b030-f227039f85ef
+    servername: cdg-1.fromblancwithlove.com
+    tls: true
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 18_1
+    type: vless
+    server: 38.107.233.130
+    port: 443
+    uuid: 5d8fcd24-9634-4dd7-845c-3dc2d6291942
+    servername: www.google.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: qq
+    reality-opts:
+      public-key: 2fgsbEAn-ALVpjnE4ZTPrzaZY70vVplYwldCnslInE0
+      short-id: 86b80f1e713a33ad
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_10"
+    type: trojan
+    server: 104.18.1.55
+    port: 443
+    password: humanity
+    sni: www.gossipglove.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+    udp: true
+  - name: 🎇Tel-@V2rayAlpha--15
+    type: vless
+    server: 46.229.243.133
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn3-87.vk-cdnvideo.com
+    tls: true
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 39_2
+    type: ss
+    server: 82.38.31.208
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_8"
+    type: vmess
+    server: de5.taskflowhub.org
+    port: 2053
+    uuid: ca58b165-0f7d-49aa-9fae-a017e8a0f884
+    alterId: 0
+    cipher: auto
+    tls: true
+    skip-cert-verify: true
+    udp: true
+  - name: "🛰️ Channel : @NitruStore_1"
+    type: vless
+    server: 188.114.97.6
+    port: 443
+    uuid: 5e0212f0-297f-4f68-a256-013466bab0d2
+    network: ws
+    servername: t5.tzteam.online
+    tls: true
+    client-fingerprint: firefox
+    ws-opts:
+      path: /?ed=2048
+      headers:
+        Host: t5.tzteam.online
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_11"
+    type: vless
+    server: 45.129.242.162
+    port: 443
+    uuid: 301d514e-4aa0-47b0-ba44-a0cb891cd52f
+    network: raw
+    servername: www.samsung.com
+    tls: true
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: OZVjfQBboTDTBw0baMFqzVPsVUI4FNQmspTEb0b0zW4
+      short-id: a1b2c3d4
+    skip-cert-verify: true
+    udp: true
+  - name: "کانال تلگرام ما: @configM_2"
+    type: vless
+    server: 130.12.242.102
+    port: 7443
+    uuid: 6ca8ea5b-e47f-4c19-adee-365456e1e87c
+    servername: www.microsoft.com
+    tls: true
+    flow: xtls-rprx-vision
+    reality-opts:
+      public-key: 5QAO98ot2U7TcGs_f6EEaQjCzNOJLNHqPf6smYsdFVI
+      short-id: d82fb387
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 28_1
+    type: trojan
+    server: 66.81.247.155
+    port: 443
+    password: humanity
+    sni: www.calmloud.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.calmloud.com
+    udp: true
+  - name: Ettehadvpn | 38_1
+    type: vless
+    server: 46.229.243.131
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn7-09.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_12"
+    type: trojan
+    server: 216.24.57.1
+    port: 443
+    password: humanity
+    sni: www.gossipglove.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+    udp: true
+  - name: Ettehadvpn | 32_1
+    type: vless
+    server: 152.233.35.228
+    port: 8443
+    uuid: 394f6981-a782-4779-9a85-e6cf22935d93
+    servername: de1.fromblancwithlove.com
+    tls: true
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 24
+    type: vless
+    server: 23.26.37.119
+    port: 8443
+    uuid: dcba77d7-bb59-4802-b32c-37fd7011fca4
+    servername: google.com
+    tls: true
+    reality-opts:
+      public-key: upDCW94g-pSYQrmXvOrTVYlwBUrSKhYFF9QwrqObdVo
+      short-id: 3ca620a7ed5f3196
+    skip-cert-verify: true
+    udp: true
+  - name: "@Filtershekan_channel |20"
+    type: vless
+    server: fastly.com
+    port: 80
+    uuid: InternetAzadRobot
+    network: http
+    tls: false
+    http-opts:
+      path:
+        - /login
+      headers:
+        Host:
+          - shangulin.global.ssl.fastly.net
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 14_2
+    type: vless
+    server: 77.74.123.168
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn7-09.vk-cdnvideo.com
+    tls: true
+    skip-cert-verify: true
+    udp: true
+  - name: 🔮@amir_webstudio🔮
+    type: vless
+    server: 31.56.28.52
+    port: 14862
+    uuid: 27cab83e-e48c-467a-a641-32eb070c03ac
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 32_2
+    type: trojan
+    server: 185.137.157.254
+    port: 443
+    password: hxn2jK9Uzezogua0oHuq9Y8viN=UCe.2Jd
+    sni: www.directorypipeline.click
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: "🚩Tel : @SERVER_DNS_3"
+    type: vless
+    server: nid.pink-perfect.ru
+    port: 443
+    uuid: 5d8fcd24-9634-4dd7-845c-3dc2d6291942
+    servername: www.google.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: qq
+    reality-opts:
+      public-key: 2fgsbEAn-ALVpjnE4ZTPrzaZY70vVplYwldCnslInE0
+      short-id: 86b80f1e713a33ad
+    skip-cert-verify: true
+    udp: true
+  - name: "@vasl_bashim شش"
+    type: trojan
+    server: 213.165.45.14
+    port: 443
+    password: SoftNetConnect
+    sni: www.yahoo.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: 786-MTN @TGv2ray
+    type: vless
+    server: sca15.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_9"
+    type: ss
+    server: 38.135.24.131
+    port: 443
+    cipher: chacha20-ietf-poly1305
+    password: hbGrpfvNrJsUmKmPbR3iY2
+    skip-cert-verify: true
+    udp: true
+  - name: "@Filtershekan_channel |15"
+    type: vless
+    server: 77.74.123.170
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn3-87.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_10"
+    type: vless
+    server: sca21.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 37_3
+    type: vless
+    server: 31.56.28.52
+    port: 14862
+    uuid: 27cab83e-e48c-467a-a641-32eb070c03ac
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_11"
+    type: vless
+    server: 91.107.191.12
+    port: 29376
+    uuid: 03bc875d-0d8e-49b6-9094-89a8159e65ee
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: "@vasl_bashim هفت"
+    type: trojan
+    server: 213.165.45.15
+    port: 443
+    password: SoftNetConnect
+    sni: www.yahoo.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: 🇫🇷51089 | ⚡️Telegram = t.me/SOSkeyNET
+    type: trojan
+    server: 217.69.2.107
+    port: 443
+    password: YGWIMlg.W1wRWQkRDcKfjZY7sng09aC=Yh
+    sni: www.weavenet.click
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: "@Filtershekan_channel |16"
+    type: ss
+    server: 82.38.31.185
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 4
+    type: vless
+    server: 85.208.139.98
+    port: 8444
+    uuid: c931f737-cafe-4e4f-998a-a65517941256
+    servername: cdnjs.com
+    tls: true
+    flow: xtls-rprx-vision
+    reality-opts:
+      public-key: Hp6K5hsiPY4_zATgAtef9YTxNGpSkhAHTTo9MUO7fik
+      short-id: 77e934f68f02ab4c
+    skip-cert-verify: true
+    udp: true
+  - name: "@V2ray_Alpha🦁 2"
+    type: ss
+    server: 82.38.31.185
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: k1dBOmOB4oqi7Ump37a1bQ
+    skip-cert-verify: true
+    udp: true
+  - name: "@Filtershekan_channel |30"
+    type: vless
+    server: 31.76.38.85
+    port: 7443
+    uuid: 6ca8ea5b-e47f-4c19-adee-365456e1e87c
+    servername: stackoverflow.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: firefox
+    reality-opts:
+      public-key: 5QAO98ot2U7TcGs_f6EEaQjCzNOJLNHqPf6smYsdFVI
+      short-id: be0ce047
+    skip-cert-verify: true
+    udp: true
+  - name: "@vasl_bashim چهار"
+    type: trojan
+    server: 213.165.45.15
+    port: 2087
+    password: SoftNetConnect
+    sni: www.icloud.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: "کانال تلگرام ما: @configM_3"
+    type: vless
+    server: 77.74.123.170
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn3-87.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: 🌀All-@V2rayAlpha--6
+    type: trojan
+    server: 104.18.152.229
+    port: 443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.ignitelimit.com
+    udp: true
+  - name: Ettehadvpn | 27_1
+    type: vless
+    server: 82.29.128.252
+    port: 443
+    uuid: f90099ab-bbb9-4d68-824b-edca0ea32cf1
+    network: http
+    servername: www.amd.com
+    tls: true
+    client-fingerprint: edge
+    http-opts:
+      path:
+        - /
+    reality-opts:
+      public-key: FoCmMBurpqNaVQWlRvyuS1um0ftKxXMnnKNbnHpe-G8
+    skip-cert-verify: true
+    udp: true
+  - name: 🇨🇦51972 | ⚡️Telegram = t.me/SOSkeyNET
+    type: trojan
+    server: 104.18.1.55
+    port: 443
+    password: humanity
+    sni: www.gossipglove.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+    udp: true
+  - name: Ettehadvpn | 34
+    type: trojan
+    server: 37.46.18.128
+    port: 41050
+    password: b1952da9-8a2a-4e2e-a79c-61914f9e6a9f
+    sni: www.oracle.com
+    skip-cert-verify: true
+    tls: true
+    udp: true
+  - name: 🇨🇦 Canada 🍓 @xixv2ray_4
+    type: vless
+    server: hyst.purplrose.ir
+    port: 8443
+    uuid: 5e042049-f74d-4ccc-a3ac-db27bca2ce99
+    network: ws
+    servername: bastani.purplrose.ir
+    tls: true
+    client-fingerprint: random
+    ws-opts:
+      path: /
+      headers:
+        Host: bastani.purplrose.ir
+    skip-cert-verify: true
+    udp: true
+  - name: 🇺🇸50226 | ⚡️Telegram = t.me/SOSkeyNET
+    type: trojan
+    server: 216.24.57.1
+    port: 443
+    password: humanity
+    sni: www.gossipglove.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+    udp: true
+  - name: Ettehadvpn | 44_1
+    type: vless
+    server: 85.234.114.53
+    port: 22231
+    uuid: afcac633-0e1a-46c3-bef2-cc01cc0097c8
+    servername: r1.mizulina.top
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_12"
+    type: vless
+    server: nid.pink-perfect.ru
+    port: 443
+    uuid: 5d8fcd24-9634-4dd7-845c-3dc2d6291942
+    servername: www.google.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: qq
+    reality-opts:
+      public-key: 2fgsbEAn-ALVpjnE4ZTPrzaZY70vVplYwldCnslInE0
+      short-id: 86b80f1e713a33ad
+    skip-cert-verify: true
+    udp: true
+  - name: 🇮🇷 Iran 🍓 @xixv2ray_2
+    type: trojan
+    server: 185.231.112.217
+    port: 40443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.ignitelimit.com
+    udp: true
+  - name: "@Filtershekan_channel |34"
+    type: vless
+    server: sca9.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: "@filembad`_7"
+    type: vless
+    server: 149.202.58.99
+    port: 443
+    uuid: b585dc5e-55bf-4a8b-913a-27c9ccac05c3
+    network: ws
+    servername: bab-6.site
+    tls: true
+    client-fingerprint: chrome
+    ws-opts:
+      path: /vws/
+      headers:
+        Host: bab-6.site
+    skip-cert-verify: true
+    udp: true
+  - name: "@filembad`_8"
+    type: vless
+    server: 79.127.196.11
+    port: 8443
+    uuid: 55f7d143-a594-4a91-b030-f227039f85ef
+    servername: cdg-1.fromblancwithlove.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: 💣3Tel:@Varkana0
+    type: vless
+    server: 31.76.38.85
+    port: 7443
+    uuid: 6ca8ea5b-e47f-4c19-adee-365456e1e87c
+    servername: stackoverflow.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: firefox
+    reality-opts:
+      public-key: 5QAO98ot2U7TcGs_f6EEaQjCzNOJLNHqPf6smYsdFVI
+      short-id: be0ce047
+    skip-cert-verify: true
+    udp: true
+  - name: CyberSec P.18
+    type: trojan
+    server: 162.251.82.47
+    port: 443
+    password: mitivpn
+    sni: mitivpn.dsech.ss.ssandfdsgx.gloteefghedcal.ssl.fastly.net.b5r.ir
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: https://chatgpt.com
+      headers:
+        Host: nl.e-mitivpn.global.ssl.b5r.ir
+    udp: true
+  - name: 🔘Tel-@V2rayAlpha--16
+    type: ss
+    server: 82.38.31.35
+    port: 8080
+    cipher: chacha20-ietf-poly1305
+    password: oZIoA69Q8yhcQV8ka3Pa3A
+    skip-cert-verify: true
+    udp: true
+  - name: 🇫🇮 Finland 🍓 @xixv2ray_1
+    type: vless
+    server: s2.dipvpn.ru
+    port: 443
+    uuid: 3559f1f7-7d70-46c9-82db-d2b46269300b
+    servername: dipvpn.ru
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: 1BdgrQ_esOEya01sDCBYK4MGpJgaUhssHQG-aWJkyFQ
+    skip-cert-verify: true
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_13"
+    type: vless
+    server: 150.241.101.222
+    port: 443
+    uuid: 749a5df1-2d12-45cf-80f3-f85ea6b2e405
+    servername: google.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: random
+    reality-opts:
+      public-key: Fp0-VrMBeaQe9xOrehDYHt0mqTZL-5CdfuMEzoXkOE8
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 29_1
+    type: vless
+    server: 89.116.46.68
+    port: 443
+    uuid: fc965ad9-bdd7-4815-ad71-b39ec5972dc1
+    network: ws
+    servername: octopusss4.com
+    tls: true
+    ws-opts:
+      path: /tsghdws
+      headers:
+        Host: octopusss4.com
+    skip-cert-verify: true
+    udp: true
+  - name: 🇨🇦 Canada 🍓 @xixv2ray_5
+    type: vless
+    server: 188.114.97.6
+    port: 443
+    uuid: 5e0212f0-297f-4f68-a256-013466bab0d2
+    network: ws
+    servername: t3.tzteam.online
+    tls: true
+    client-fingerprint: firefox
+    ws-opts:
+      path: /?ed=2048
+      headers:
+        Host: t3.tzteam.online
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 3
+    type: vless
+    server: sca21.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: "کانال تلگرام ما: @configM_4"
+    type: vless
+    server: 77.74.123.168
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn3-87.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: "@V2ray_Alpha🦁 6"
+    type: vless
+    server: cdn7-39.vk-cdnvideo.com
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    tls: true
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 38_2
+    type: vless
+    server: 31.76.38.85
+    port: 7443
+    uuid: 6ca8ea5b-e47f-4c19-adee-365456e1e87c
+    servername: stackoverflow.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: firefox
+    reality-opts:
+      public-key: 5QAO98ot2U7TcGs_f6EEaQjCzNOJLNHqPf6smYsdFVI
+      short-id: be0ce047
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_13"
+    type: trojan
+    server: 104.19.229.21
+    port: 443
+    password: humanity
+    sni: www.calmlunch.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.calmlunch.com
+    udp: true
+  - name: 2🍅@ConfigX2ray
+    type: vless
+    server: 141.193.213.10
+    port: 443
+    uuid: fc965ad9-bdd7-4815-ad71-b39ec5972dc1
+    network: ws
+    servername: octopusss4.com
+    tls: true
+    ws-opts:
+      path: /tsghdws
+      headers:
+        Host: octopusss4.com
+    skip-cert-verify: true
+    udp: true
+  - name: 🎇Tel-@V2rayAlpha--2
+    type: vless
+    server: 104.19.64.105
+    port: 8443
+    uuid: 5c0700dc-0ce4-4171-ae82-6953911466c1
+    network: ws
+    servername: focalin.adaspoloandco.com
+    tls: true
+    client-fingerprint: chrome
+    ws-opts:
+      path: /RizZrAcK
+      headers:
+        Host: focalin.adaspoloandco.com
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_14"
+    type: trojan
+    server: 104.16.174.121
+    port: 443
+    password: humanity
+    sni: www.ignitelimit.com
+    skip-cert-verify: true
+    tls: true
+    ws-opts:
+      path: /assignment
+      headers:
+        Host: www.ignitelimit.com
+    udp: true
+  - name: "@hi_proxy_iran :👈کانال تل_14"
+    type: vless
+    server: 151.115.166.68
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: Ettehadvpn | 26_1
+    type: vless
+    server: 193.233.23.196
+    port: 26048
+    uuid: 3007b043-acdf-43a4-900e-c7c015406f89
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 🇮🇷 Iran 🍓 @xixv2ray_3
+    type: vless
+    server: blubank.ir
+    port: 80
+    uuid: afb3eb91-6ab7-4c70-874e-716e2481cb7d
+    network: ws
+    tls: false
+    ws-opts:
+      path: /
+      headers:
+        Host: vip.masterdadeh.ir
+    skip-cert-verify: true
+    udp: true
+  - name: "کانال تلگرام ما: @configM_5"
+    type: vless
+    server: 46.229.243.69
+    port: 8443
+    uuid: 931729a8-3c20-4841-89a1-f18dc9ce0a6f
+    servername: cdn7-39.vk-cdnvideo.com
+    tls: true
+    client-fingerprint: chrome
+    skip-cert-verify: true
+    udp: true
+  - name: 🇳🇱51295 | ⚡️Telegram = t.me/SOSkeyNET
+    type: ss
+    server: 195.93.253.240
+    port: 14130
+    cipher: chacha20-ietf-poly1305
+    password: 5DJXRpmi3iyqxQ79PfKv3B
+    skip-cert-verify: true
+    udp: true
+  - name: V2RAYENGLISH@🔐
+    type: vless
+    server: 141.98.118.70
+    port: 443
+    uuid: de64aaa6-a0ea-48d0-853b-1c3cbc7fb42c
+    network: http
+    servername: www.google.com
+    tls: true
+    client-fingerprint: random
+    http-opts:
+      path:
+        - /
+    reality-opts:
+      public-key: LjEQR0FEtsOs5eQoVsZgJX5ZI0yeadUKTCLoGD641RQ
+      short-id: "44"
+    skip-cert-verify: true
+    udp: true
+  - name: 🇬🇧51149 | ⚡️Telegram = t.me/SOSkeyNET
+    type: vless
+    server: 31.76.91.31
+    port: 443
+    uuid: dfc0cb9d-f005-41b0-848c-7703bd39d0de
+    servername: jp.s3-cloud.org
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: edge
+    reality-opts:
+      public-key: QVkd5uoSbUA7rHVLtIoJB4iRp4l0zuw0H9qzQBh3lHs
+      short-id: 7a3f9e2b1c8d4f6a
+    skip-cert-verify: true
+    udp: true
+  - name: "@Filtershekan_channel |9"
+    type: vless
+    server: sca9.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 🇧🇬51842 | ⚡️Telegram = t.me/SOSkeyNET
+    type: vless
+    server: 87.229.34.23
+    port: 443
+    uuid: 072b32f9-c34e-43b8-aaf8-f2aae379b155
+    servername: www.samsung.com
+    tls: true
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: OZVjfQBboTDTBw0baMFqzVPsVUI4FNQmspTEb0b0zW4
+    skip-cert-verify: true
+    udp: true
+  - name: 783-MTN @TGv2ray
+    type: vless
+    server: sca9.myfymain.com
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: 784-MTN @TGv2ray
+    type: vless
+    server: 151.115.164.126
+    port: 8880
+    uuid: 8dc7722c-2767-4eea-a28b-2f8daacc07e3
+    network: grpc
+    tls: false
+    skip-cert-verify: true
+    udp: true
+  - name: "***✅***@AR14N24b_15"
+    type: trojan
+    server: 104.18.185.26
+    port: 443
+    password: humanity
+    sni: www.gossipglove.com
+    skip-cert-verify: true
+    tls: false
+    ws-opts:
+      path: /assignment
+    udp: true
+  - name: 🇳🇱51530 | ⚡️Telegram = t.me/SOSkeyNET
+    type: ss
+    server: 195.93.253.240
+    port: 14130
+    cipher: chacha20-ietf-poly1305
+    password: bvGa054MauyCOmaeYtWuOJ
+    skip-cert-verify: true
+    udp: true
+  - name: 🎇Tel-@V2rayAlpha--4
+    type: vless
+    server: nid.pink-perfect.ru
+    port: 443
+    uuid: 5d8fcd24-9634-4dd7-845c-3dc2d6291942
+    servername: www.google.com
+    tls: true
+    flow: xtls-rprx-vision
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: 2fgsbEAn-ALVpjnE4ZTPrzaZY70vVplYwldCnslInE0
+      short-id: 86b80f1e713a33ad
+    skip-cert-verify: true
+    udp: true
+
+proxy-groups:
+  - name: "نوع انتخاب پروکسی 🔀"
+    icon: https://www.svgrepo.com/show/412721/choose.svg
+    type: select
+    proxies:
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "قطع اینترنت ⛔"
+      - "بدون فیلترشکن 🛡️"
+  - name: "دستی 🤏🏻"
+    type: select
+    icon: https://www.svgrepo.com/show/372331/cursor-hand-click.svg
+    proxies:
+      - Ettehadvpn | 2
+      - 🥀@amir_webstudio🥀
+      - Ettehadvpn | 42
+      - "***✅***@AR14N24b"
+      - "کانال تلگرام ما: @configM"
+      - Ettehadvpn | 19
+      - BAMANETORG
+      - BAMANETORG_1
+      - BAMANETORG_2
+      - BAMANETORG_3
+      - 🇸🇨 Seychelles 🍓 @xixv2ray
+      - 🇳🇱51667 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 29
+      - BegzarVPN - 1
+      - BegzarVPN - 6
+      - Ettehadvpn | 28
+      - "@hi_proxy_iran :👈کانال تل"
+      - 🎇Tel-@V2rayAlpha--13
+      - BegzarVPN - 2
+      - BegzarVPN - 5
+      - BegzarVPN - 3
+      - Ettehadvpn | 10
+      - "@filembad`"
+      - BegzarVPN - 4
+      - Ettehadvpn | 1
+      - BAMANETORG_4
+      - Ettehadvpn | 14
+      - 💥@amir_webstudio💥
+      - "@filterboro🇨🇭(9)"
+      - 🎇Tel-@V2rayAlpha--11
+      - "@filterboro🇨🇭(2)"
+      - "@hi_proxy_iran :👈کانال تل_1"
+      - Ettehadvpn | 10_1
+      - Ettehadvpn | 2_1
+      - 🇨🇭 | 🍓@xixv2ray
+      - Ettehadvpn | 37
+      - "@filterboro🇨🇭(6)"
+      - 🇸🇨 Seychelles 🍓 @xixv2ray_1
+      - "@filterboro🇨🇭(8)"
+      - 💫@amir_webstudio💫
+      - "@confingmg"
+      - BegzarVPN - 9
+      - Ettehadvpn | 10_2
+      - "@hi_proxy_iran :👈کانال تل_2"
+      - "@hi_proxy_iran :👈کانال تل_3"
+      - "@hi_proxy_iran :👈کانال تل_4"
+      - "@filterboro🇨🇭(7)"
+      - "@hi_proxy_iran :👈کانال تل_5"
+      - 🦁☀️@varkana0
+      - 🇨🇭Ettehadvpn | 13
+      - Ettehadvpn | 9
+      - ✅سرورهایبیشتردرکانال:prro
+      - "@Cooonfig(🌱ژیک👸)"
+      - BAMANETORG_5
+      - 🎇Tel-@V2rayAlpha--19
+      - 🔘Tel-@V2rayAlpha--21
+      - Ettehadvpn | 23
+      - Ettehadvpn | 37_1
+      - 🔘Tel-@V2rayAlpha--19
+      - Ettehadvpn | 8
+      - Ettehadvpn | 8_1
+      - 🖤Tel:@Varkana0-1
+      - Ettehadvpn | 39
+      - 🇳🇱NL  ROSE—13
+      - "🛰️ Channel : @NitruStore"
+      - 🎇Tel-@V2rayAlpha--6
+      - 🇧🇻 Ettehadvpn | 39
+      - 🎇Tel-@V2rayAlpha--8
+      - Ettehadvpn | 26
+      - "@v2FreeHub 🇦🇪"
+      - Ettehadvpn | 32
+      - 🇬🇧filterboro(4)
+      - Ettehadvpn | 5
+      - 🔘Tel-@V2rayAlpha--3
+      - Ettehadvpn | 36
+      - BAMANETORG_6
+      - 🇨🇦 Canada 🍓 @xixv2ray
+      - 🇨🇦 Canada 🍓 @xixv2ray_1
+      - BAMANETORG_7
+      - "@Nftvici"
+      - "***🛸***@V2ray_official"
+      - Ettehadvpn | 37_2
+      - "@Filtershekan_channel |8"
+      - V2RAYENGLISH@✨
+      - 🎇Tel-@V2rayAlpha--9
+      - 🔘Tel-@V2rayAlpha--13
+      - "کانال تلگرام ما: @configM_1"
+      - 🌼@amir_webstudio🌼
+      - 📀16@oneclickvpnkeys
+      - 💎👑 𝗥𝗢𝗬𝗔𝗟 👑💎
+      - Ettehadvpn | 16
+      - Ettehadvpn | 36_1
+      - Ettehadvpn | 17
+      - Ettehadvpn | 7
+      - "@vasl_bashim نه"
+      - "@filembad`_1"
+      - 🔘Tel-@V2rayAlpha--17
+      - BegzarVPN - 8
+      - 🇳🇱50629 | ⚡️Telegram = t.me/SOSkeyNET
+      - 🇹🇷Tel:@Varkana0
+      - 🏅@amir_webstudio🏅
+      - 🇨🇦 Canada 🍓 @xixv2ray_2
+      - "@hi_proxy_iran :👈کانال تل_6"
+      - 🇬🇧51501 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 15
+      - Ettehadvpn | 2_2
+      - 🇬🇧51317 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 5_1
+      - "***✅***@AR14N24b_1"
+      - "@IranProxyPlus`"
+      - 🇬🇧51150 | ⚡️Telegram = t.me/SOSkeyNET
+      - 🇬🇧51316 | ⚡️Telegram = t.me/SOSkeyNET
+      - 🔘Tel-@V2rayAlpha--25
+      - "@filembad`_2"
+      - "***✅***@AR14N24b`"
+      - 🔘Tel-@V2rayAlpha--9
+      - Ettehadvpn | 30
+      - "***✅***@AR14N24b_2"
+      - BegzarVPN - 7
+      - "@meliproxyy"
+      - "@filembad`_3"
+      - "***🛸***@V2ray_official_1"
+      - "***✅***@AR14N24b`_1"
+      - "***✅***@AR14N24b`_2"
+      - Ettehadvpn | 18
+      - "@filembad`_4"
+      - 🇬🇧51211 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 25
+      - "@hi_proxy_iran :👈کانال تل_7"
+      - Ettehadvpn | 27
+      - Ettehadvpn | 38
+      - Ettehadvpn | 10_3
+      - Ettehadvpn | 25_1
+      - Ettehadvpn | 6
+      - "***✅***@AR14N24b_3"
+      - "***✅***@AR14N24b_4"
+      - Ettehadvpn | 13
+      - 🎇Tel-@V2rayAlpha--16
+      - "@Filtershekan_channel |28"
+      - 🇹🇼50636 | ⚡️Telegram = t.me/SOSkeyNET
+      - "@filterboro🇨🇭(4)"
+      - "🚩Tel : @SERVER_DNS"
+      - 🇮🇹Ettehadvpn | 33
+      - Ettehadvpn | 41
+      - 🇨🇦51984 | ⚡️Telegram = t.me/SOSkeyNET
+      - BAMANETORG_8
+      - ♾️67@oneclickvpnkeys
+      - "@V2ray_Alpha🦁 9"
+      - "***✅***@AR14N24b_5"
+      - 🇬🇧filterboro(2)
+      - 🇫🇷Ettehadvpn | 40
+      - 🇨🇦51066 | ⚡️Telegram = t.me/SOSkeyNET
+      - "***⚡***@V2ray_official"
+      - 🇨🇦 Canada 🍓 @xixv2ray_3
+      - Ettehadvpn | 42_1
+      - MmDFreakKURd³@llFreak
+      - Ettehadvpn | 11
+      - Ettehadvpn | 44
+      - Ettehadvpn | 46
+      - "🚩Tel : @SERVER_DNS_1"
+      - 🌺@amir_webstudio🌺
+      - 🇯🇵52252 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 39_1
+      - 🇮🇷 Iran 🍓 @xixv2ray
+      - 🇩🇪 Germany 🍓 @xixv2ray
+      - Ettehadvpn | 5_2
+      - "@MARAMBASHI  🇨🇦"
+      - 🇯🇵52251 | ⚡️Telegram = t.me/SOSkeyNET
+      - T.me/CONFiGiR98🖐2
+      - "***✅***@AR14N24b_6"
+      - "@Filtershekan_channel |26"
+      - "@Filtershekan_channel |33"
+      - 🇮🇷 Iran 🍓 @xixv2ray_1
+      - Ettehadvpn | 31
+      - DRA_NET_FREE@ - 1
+      - 7🍅@ConfigX2ray
+      - Ettehadvpn | 19_1
+      - Ettehadvpn | 14_1
+      - ♾️73@oneclickvpnkeys
+      - Ettehadvpn | 17_1
+      - Ettehadvpn | 21
+      - Ettehadvpn | 47
+      - ☀️🦁@varkana0
+      - MmDFreakKURd²@llFreak
+      - "@filembad`_5"
+      - 🎇Tel-@V2rayAlpha--1
+      - Ettehadvpn | 23_1
+      - "***✅***@AR14N24b_7"
+      - Ettehadvpn | 16_1
+      - 🇫🇮 Finland 🍓 @xixv2ray
+      - Ettehadvpn | 35
+      - Ettehadvpn | 45
+      - "***✅***@AR14N24b_8"
+      - "@vasl_bashim ⁴"
+      - 🚀@amir_webstudio🚀
+      - "🚩Tel : @SERVER_DNS_2"
+      - قشاع☯️
+      - "@filembad`_6"
+      - 🇮🇹Ettehadvpn | 11
+      - 🌟@amir_webstudio🌟
+      - "@Filtershekan_channel |32"
+      - Ettehadvpn | 7_1
+      - 🔘Tel-@V2rayAlpha--7
+      - 🇬🇧51310 | ⚡️Telegram = t.me/SOSkeyNET
+      - 🇩🇪 Germany 🍓 @xixv2ray_1
+      - "@V2ray_Alpha🦁 7"
+      - ♾️20@oneclickvpnkeys
+      - "@ConfigX2ray اخر"
+      - "***✅***@AR14N24b_9"
+      - Ettehadvpn | 23_2
+      - Ettehadvpn | 30_1
+      - "@IranProxyPlus`_1"
+      - Ettehadvpn | 18_1
+      - "***✅***@AR14N24b_10"
+      - 🎇Tel-@V2rayAlpha--15
+      - Ettehadvpn | 39_2
+      - "@hi_proxy_iran :👈کانال تل_8"
+      - "🛰️ Channel : @NitruStore_1"
+      - "***✅***@AR14N24b_11"
+      - "کانال تلگرام ما: @configM_2"
+      - Ettehadvpn | 28_1
+      - Ettehadvpn | 38_1
+      - "***✅***@AR14N24b_12"
+      - Ettehadvpn | 32_1
+      - Ettehadvpn | 24
+      - "@Filtershekan_channel |20"
+      - Ettehadvpn | 14_2
+      - 🔮@amir_webstudio🔮
+      - Ettehadvpn | 32_2
+      - "🚩Tel : @SERVER_DNS_3"
+      - "@vasl_bashim شش"
+      - 786-MTN @TGv2ray
+      - "@hi_proxy_iran :👈کانال تل_9"
+      - "@Filtershekan_channel |15"
+      - "@hi_proxy_iran :👈کانال تل_10"
+      - Ettehadvpn | 37_3
+      - "@hi_proxy_iran :👈کانال تل_11"
+      - "@vasl_bashim هفت"
+      - 🇫🇷51089 | ⚡️Telegram = t.me/SOSkeyNET
+      - "@Filtershekan_channel |16"
+      - Ettehadvpn | 4
+      - "@V2ray_Alpha🦁 2"
+      - "@Filtershekan_channel |30"
+      - "@vasl_bashim چهار"
+      - "کانال تلگرام ما: @configM_3"
+      - 🌀All-@V2rayAlpha--6
+      - Ettehadvpn | 27_1
+      - 🇨🇦51972 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 34
+      - 🇨🇦 Canada 🍓 @xixv2ray_4
+      - 🇺🇸50226 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 44_1
+      - "@hi_proxy_iran :👈کانال تل_12"
+      - 🇮🇷 Iran 🍓 @xixv2ray_2
+      - "@Filtershekan_channel |34"
+      - "@filembad`_7"
+      - "@filembad`_8"
+      - 💣3Tel:@Varkana0
+      - CyberSec P.18
+      - 🔘Tel-@V2rayAlpha--16
+      - 🇫🇮 Finland 🍓 @xixv2ray_1
+      - "@hi_proxy_iran :👈کانال تل_13"
+      - Ettehadvpn | 29_1
+      - 🇨🇦 Canada 🍓 @xixv2ray_5
+      - Ettehadvpn | 3
+      - "کانال تلگرام ما: @configM_4"
+      - "@V2ray_Alpha🦁 6"
+      - Ettehadvpn | 38_2
+      - "***✅***@AR14N24b_13"
+      - 2🍅@ConfigX2ray
+      - 🎇Tel-@V2rayAlpha--2
+      - "***✅***@AR14N24b_14"
+      - "@hi_proxy_iran :👈کانال تل_14"
+      - Ettehadvpn | 26_1
+      - 🇮🇷 Iran 🍓 @xixv2ray_3
+      - "کانال تلگرام ما: @configM_5"
+      - 🇳🇱51295 | ⚡️Telegram = t.me/SOSkeyNET
+      - V2RAYENGLISH@🔐
+      - 🇬🇧51149 | ⚡️Telegram = t.me/SOSkeyNET
+      - "@Filtershekan_channel |9"
+      - 🇧🇬51842 | ⚡️Telegram = t.me/SOSkeyNET
+      - 783-MTN @TGv2ray
+      - 784-MTN @TGv2ray
+      - "***✅***@AR14N24b_15"
+      - 🇳🇱51530 | ⚡️Telegram = t.me/SOSkeyNET
+      - 🎇Tel-@V2rayAlpha--4
+  - name: "خودکار (بهترین پینگ) 🤖"
+    type: url-test
+    icon: https://www.svgrepo.com/show/7876/speedometer.svg
+    url: 'https://www.gstatic.com/generate_204' # استفاده از یو‌آر‌ال سبک‌تر و پایدارتر
+    interval: 600
+    tolerance: 50
+    timeout: 3200 # اگر پروکسی در ۱.۲ ثانیه وصل نشد، معطلش نکن و مرده فرضش کن
+    lazy: false # بسیار مهم: تست‌ها باید همیشه در پس‌زمینه انجام شوند تا پروکسیِ آماده داشته باشی
+    max-failed-times: 2 # بعد از ۲ بار خطا، سریعاً تست اجباری انجام دهد
+    proxies:
+      - Ettehadvpn | 2
+      - 🥀@amir_webstudio🥀
+      - Ettehadvpn | 42
+      - "***✅***@AR14N24b"
+      - "کانال تلگرام ما: @configM"
+      - Ettehadvpn | 19
+      - BAMANETORG
+      - BAMANETORG_1
+      - BAMANETORG_2
+      - BAMANETORG_3
+      - 🇸🇨 Seychelles 🍓 @xixv2ray
+      - 🇳🇱51667 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 29
+      - BegzarVPN - 1
+      - BegzarVPN - 6
+      - Ettehadvpn | 28
+      - "@hi_proxy_iran :👈کانال تل"
+      - 🎇Tel-@V2rayAlpha--13
+      - BegzarVPN - 2
+      - BegzarVPN - 5
+      - BegzarVPN - 3
+      - Ettehadvpn | 10
+      - "@filembad`"
+      - BegzarVPN - 4
+      - Ettehadvpn | 1
+      - BAMANETORG_4
+      - Ettehadvpn | 14
+      - 💥@amir_webstudio💥
+      - "@filterboro🇨🇭(9)"
+      - 🎇Tel-@V2rayAlpha--11
+      - "@filterboro🇨🇭(2)"
+      - "@hi_proxy_iran :👈کانال تل_1"
+      - Ettehadvpn | 10_1
+      - Ettehadvpn | 2_1
+      - 🇨🇭 | 🍓@xixv2ray
+      - Ettehadvpn | 37
+      - "@filterboro🇨🇭(6)"
+      - 🇸🇨 Seychelles 🍓 @xixv2ray_1
+      - "@filterboro🇨🇭(8)"
+      - 💫@amir_webstudio💫
+      - "@confingmg"
+      - BegzarVPN - 9
+      - Ettehadvpn | 10_2
+      - "@hi_proxy_iran :👈کانال تل_2"
+      - "@hi_proxy_iran :👈کانال تل_3"
+      - "@hi_proxy_iran :👈کانال تل_4"
+      - "@filterboro🇨🇭(7)"
+      - "@hi_proxy_iran :👈کانال تل_5"
+      - 🦁☀️@varkana0
+      - 🇨🇭Ettehadvpn | 13
+      - Ettehadvpn | 9
+      - ✅سرورهایبیشتردرکانال:prro
+      - "@Cooonfig(🌱ژیک👸)"
+      - BAMANETORG_5
+      - 🎇Tel-@V2rayAlpha--19
+      - 🔘Tel-@V2rayAlpha--21
+      - Ettehadvpn | 23
+      - Ettehadvpn | 37_1
+      - 🔘Tel-@V2rayAlpha--19
+      - Ettehadvpn | 8
+      - Ettehadvpn | 8_1
+      - 🖤Tel:@Varkana0-1
+      - Ettehadvpn | 39
+      - 🇳🇱NL  ROSE—13
+      - "🛰️ Channel : @NitruStore"
+      - 🎇Tel-@V2rayAlpha--6
+      - 🇧🇻 Ettehadvpn | 39
+      - 🎇Tel-@V2rayAlpha--8
+      - Ettehadvpn | 26
+      - "@v2FreeHub 🇦🇪"
+      - Ettehadvpn | 32
+      - 🇬🇧filterboro(4)
+      - Ettehadvpn | 5
+      - 🔘Tel-@V2rayAlpha--3
+      - Ettehadvpn | 36
+      - BAMANETORG_6
+      - 🇨🇦 Canada 🍓 @xixv2ray
+      - 🇨🇦 Canada 🍓 @xixv2ray_1
+      - BAMANETORG_7
+      - "@Nftvici"
+      - "***🛸***@V2ray_official"
+      - Ettehadvpn | 37_2
+      - "@Filtershekan_channel |8"
+      - V2RAYENGLISH@✨
+      - 🎇Tel-@V2rayAlpha--9
+      - 🔘Tel-@V2rayAlpha--13
+      - "کانال تلگرام ما: @configM_1"
+      - 🌼@amir_webstudio🌼
+      - 📀16@oneclickvpnkeys
+      - 💎👑 𝗥𝗢𝗬𝗔𝗟 👑💎
+      - Ettehadvpn | 16
+      - Ettehadvpn | 36_1
+      - Ettehadvpn | 17
+      - Ettehadvpn | 7
+      - "@vasl_bashim نه"
+      - "@filembad`_1"
+      - 🔘Tel-@V2rayAlpha--17
+      - BegzarVPN - 8
+      - 🇳🇱50629 | ⚡️Telegram = t.me/SOSkeyNET
+      - 🇹🇷Tel:@Varkana0
+      - 🏅@amir_webstudio🏅
+      - 🇨🇦 Canada 🍓 @xixv2ray_2
+      - "@hi_proxy_iran :👈کانال تل_6"
+      - 🇬🇧51501 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 15
+      - Ettehadvpn | 2_2
+      - 🇬🇧51317 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 5_1
+      - "***✅***@AR14N24b_1"
+      - "@IranProxyPlus`"
+      - 🇬🇧51150 | ⚡️Telegram = t.me/SOSkeyNET
+      - 🇬🇧51316 | ⚡️Telegram = t.me/SOSkeyNET
+      - 🔘Tel-@V2rayAlpha--25
+      - "@filembad`_2"
+      - "***✅***@AR14N24b`"
+      - 🔘Tel-@V2rayAlpha--9
+      - Ettehadvpn | 30
+      - "***✅***@AR14N24b_2"
+      - BegzarVPN - 7
+      - "@meliproxyy"
+      - "@filembad`_3"
+      - "***🛸***@V2ray_official_1"
+      - "***✅***@AR14N24b`_1"
+      - "***✅***@AR14N24b`_2"
+      - Ettehadvpn | 18
+      - "@filembad`_4"
+      - 🇬🇧51211 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 25
+      - "@hi_proxy_iran :👈کانال تل_7"
+      - Ettehadvpn | 27
+      - Ettehadvpn | 38
+      - Ettehadvpn | 10_3
+      - Ettehadvpn | 25_1
+      - Ettehadvpn | 6
+      - "***✅***@AR14N24b_3"
+      - "***✅***@AR14N24b_4"
+      - Ettehadvpn | 13
+      - 🎇Tel-@V2rayAlpha--16
+      - "@Filtershekan_channel |28"
+      - 🇹🇼50636 | ⚡️Telegram = t.me/SOSkeyNET
+      - "@filterboro🇨🇭(4)"
+      - "🚩Tel : @SERVER_DNS"
+      - 🇮🇹Ettehadvpn | 33
+      - Ettehadvpn | 41
+      - 🇨🇦51984 | ⚡️Telegram = t.me/SOSkeyNET
+      - BAMANETORG_8
+      - ♾️67@oneclickvpnkeys
+      - "@V2ray_Alpha🦁 9"
+      - "***✅***@AR14N24b_5"
+      - 🇬🇧filterboro(2)
+      - 🇫🇷Ettehadvpn | 40
+      - 🇨🇦51066 | ⚡️Telegram = t.me/SOSkeyNET
+      - "***⚡***@V2ray_official"
+      - 🇨🇦 Canada 🍓 @xixv2ray_3
+      - Ettehadvpn | 42_1
+      - MmDFreakKURd³@llFreak
+      - Ettehadvpn | 11
+      - Ettehadvpn | 44
+      - Ettehadvpn | 46
+      - "🚩Tel : @SERVER_DNS_1"
+      - 🌺@amir_webstudio🌺
+      - 🇯🇵52252 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 39_1
+      - 🇮🇷 Iran 🍓 @xixv2ray
+      - 🇩🇪 Germany 🍓 @xixv2ray
+      - Ettehadvpn | 5_2
+      - "@MARAMBASHI  🇨🇦"
+      - 🇯🇵52251 | ⚡️Telegram = t.me/SOSkeyNET
+      - T.me/CONFiGiR98🖐2
+      - "***✅***@AR14N24b_6"
+      - "@Filtershekan_channel |26"
+      - "@Filtershekan_channel |33"
+      - 🇮🇷 Iran 🍓 @xixv2ray_1
+      - Ettehadvpn | 31
+      - DRA_NET_FREE@ - 1
+      - 7🍅@ConfigX2ray
+      - Ettehadvpn | 19_1
+      - Ettehadvpn | 14_1
+      - ♾️73@oneclickvpnkeys
+      - Ettehadvpn | 17_1
+      - Ettehadvpn | 21
+      - Ettehadvpn | 47
+      - ☀️🦁@varkana0
+      - MmDFreakKURd²@llFreak
+      - "@filembad`_5"
+      - 🎇Tel-@V2rayAlpha--1
+      - Ettehadvpn | 23_1
+      - "***✅***@AR14N24b_7"
+      - Ettehadvpn | 16_1
+      - 🇫🇮 Finland 🍓 @xixv2ray
+      - Ettehadvpn | 35
+      - Ettehadvpn | 45
+      - "***✅***@AR14N24b_8"
+      - "@vasl_bashim ⁴"
+      - 🚀@amir_webstudio🚀
+      - "🚩Tel : @SERVER_DNS_2"
+      - قشاع☯️
+      - "@filembad`_6"
+      - 🇮🇹Ettehadvpn | 11
+      - 🌟@amir_webstudio🌟
+      - "@Filtershekan_channel |32"
+      - Ettehadvpn | 7_1
+      - 🔘Tel-@V2rayAlpha--7
+      - 🇬🇧51310 | ⚡️Telegram = t.me/SOSkeyNET
+      - 🇩🇪 Germany 🍓 @xixv2ray_1
+      - "@V2ray_Alpha🦁 7"
+      - ♾️20@oneclickvpnkeys
+      - "@ConfigX2ray اخر"
+      - "***✅***@AR14N24b_9"
+      - Ettehadvpn | 23_2
+      - Ettehadvpn | 30_1
+      - "@IranProxyPlus`_1"
+      - Ettehadvpn | 18_1
+      - "***✅***@AR14N24b_10"
+      - 🎇Tel-@V2rayAlpha--15
+      - Ettehadvpn | 39_2
+      - "@hi_proxy_iran :👈کانال تل_8"
+      - "🛰️ Channel : @NitruStore_1"
+      - "***✅***@AR14N24b_11"
+      - "کانال تلگرام ما: @configM_2"
+      - Ettehadvpn | 28_1
+      - Ettehadvpn | 38_1
+      - "***✅***@AR14N24b_12"
+      - Ettehadvpn | 32_1
+      - Ettehadvpn | 24
+      - "@Filtershekan_channel |20"
+      - Ettehadvpn | 14_2
+      - 🔮@amir_webstudio🔮
+      - Ettehadvpn | 32_2
+      - "🚩Tel : @SERVER_DNS_3"
+      - "@vasl_bashim شش"
+      - 786-MTN @TGv2ray
+      - "@hi_proxy_iran :👈کانال تل_9"
+      - "@Filtershekan_channel |15"
+      - "@hi_proxy_iran :👈کانال تل_10"
+      - Ettehadvpn | 37_3
+      - "@hi_proxy_iran :👈کانال تل_11"
+      - "@vasl_bashim هفت"
+      - 🇫🇷51089 | ⚡️Telegram = t.me/SOSkeyNET
+      - "@Filtershekan_channel |16"
+      - Ettehadvpn | 4
+      - "@V2ray_Alpha🦁 2"
+      - "@Filtershekan_channel |30"
+      - "@vasl_bashim چهار"
+      - "کانال تلگرام ما: @configM_3"
+      - 🌀All-@V2rayAlpha--6
+      - Ettehadvpn | 27_1
+      - 🇨🇦51972 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 34
+      - 🇨🇦 Canada 🍓 @xixv2ray_4
+      - 🇺🇸50226 | ⚡️Telegram = t.me/SOSkeyNET
+      - Ettehadvpn | 44_1
+      - "@hi_proxy_iran :👈کانال تل_12"
+      - 🇮🇷 Iran 🍓 @xixv2ray_2
+      - "@Filtershekan_channel |34"
+      - "@filembad`_7"
+      - "@filembad`_8"
+      - 💣3Tel:@Varkana0
+      - CyberSec P.18
+      - 🔘Tel-@V2rayAlpha--16
+      - 🇫🇮 Finland 🍓 @xixv2ray_1
+      - "@hi_proxy_iran :👈کانال تل_13"
+      - Ettehadvpn | 29_1
+      - 🇨🇦 Canada 🍓 @xixv2ray_5
+      - Ettehadvpn | 3
+      - "کانال تلگرام ما: @configM_4"
+      - "@V2ray_Alpha🦁 6"
+      - Ettehadvpn | 38_2
+      - "***✅***@AR14N24b_13"
+      - 2🍅@ConfigX2ray
+      - 🎇Tel-@V2rayAlpha--2
+      - "***✅***@AR14N24b_14"
+      - "@hi_proxy_iran :👈کانال تل_14"
+      - Ettehadvpn | 26_1
+      - 🇮🇷 Iran 🍓 @xixv2ray_3
+      - "کانال تلگرام ما: @configM_5"
+      - 🇳🇱51295 | ⚡️Telegram = t.me/SOSkeyNET
+      - V2RAYENGLISH@🔐
+      - 🇬🇧51149 | ⚡️Telegram = t.me/SOSkeyNET
+      - "@Filtershekan_channel |9"
+      - 🇧🇬51842 | ⚡️Telegram = t.me/SOSkeyNET
+      - 783-MTN @TGv2ray
+      - 784-MTN @TGv2ray
+      - "***✅***@AR14N24b_15"
+      - 🇳🇱51530 | ⚡️Telegram = t.me/SOSkeyNET
+      - 🎇Tel-@V2rayAlpha--4
+
+  - name: المنت 💬
+    type: select
+    icon: https://www.svgrepo.com/show/353655/matrix-icon.svg
+    proxies:
+      - "بدون فیلترشکن 🛡️"
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+
+  - name: تیم‌اسپیک 🎧
+    type: select
+    icon: https://www.svgrepo.com/show/331567/teamspeak.svg
+    proxies:
+      - "بدون فیلترشکن 🛡️"
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+
+  - name: دلتاچت ✉️
+    type: select
+    icon: https://www.svgrepo.com/show/373771/mail.svg
+    proxies:
+      - "بدون فیلترشکن 🛡️"
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+
+  - name: دانلود منیجر 📥
+    type: select
+    icon: https://www.sadeemrdp.com/fonts/apps/IDM-Logo.svg
+    proxies:
+      - "بدون فیلترشکن 🛡️"
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: تلگرام 💬
+    type: select
+    icon: https://www.svgrepo.com/show/354443/telegram.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: یوتیوب ▶️
+    type: select
+    icon: https://www.svgrepo.com/show/475700/youtube-color.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+      - "بدون فیلترشکن 🛡️"
+  - name: گوگل 🌍
+    type: select
+    icon: https://www.svgrepo.com/show/475656/google-color.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: واتس آپ 🟢
+    type: select
+    icon: https://upload.wikimedia.org/wikipedia/commons/4/4c/WhatsApp_Logo_green.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+      - "بدون فیلترشکن 🛡️"
+  - name: هوش مصنوعی 🤖
+    type: select
+    icon: https://www.svgrepo.com/show/306500/openai.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: توییتر 🐦
+    type: select
+    icon: https://www.svgrepo.com/show/475689/twitter-color.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: اسپاتیفای 🎵
+    type: select
+    icon: https://www.svgrepo.com/show/475684/spotify-color.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: اینستاگرام 📸
+    type: select
+    icon: https://www.svgrepo.com/show/452229/instagram-1.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+      - "بدون فیلترشکن 🛡️"
+  - name: تبلیغات 🆎
+    type: select
+    icon: https://www.svgrepo.com/show/336358/ad.svg
+    proxies:
+      - "اجازه ندادن 🚫"
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "بدون فیلترشکن 🛡️"
+  - name: تبلیغات اپ ها 🍃
+    type: select
+    icon: https://www.svgrepo.com/show/12172/smartphone-ad.svg
+    proxies:
+      - "اجازه ندادن 🚫"
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "بدون فیلترشکن 🛡️"
+  - name: رهگیری جهانی 🛑
+    type: select
+    icon: https://www.svgrepo.com/show/298725/tracking-track.svg
+    proxies:
+      - "اجازه ندادن 🚫"
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "بدون فیلترشکن 🛡️"
+  - name: سایتای مخرب ⚠️
+    type: select
+    icon: https://www.svgrepo.com/show/381135/cyber-crime-cyber-phishing-fraud-hack-money.svg
+    proxies:
+      - "اجازه ندادن 🚫"
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "بدون فیلترشکن 🛡️"
+  - name: استیم 🖥️
+    type: select
+    icon: https://www.svgrepo.com/show/452107/steam.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: گیم 🎮
+    type: select
+    icon: https://www.svgrepo.com/show/167729/game-controller.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: توییچ 📡
+    type: select
+    icon: https://www.svgrepo.com/show/343527/twitch-network-communication-interaction-connection.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: سایتای ایرانی 🇮🇷
+    type: select
+    icon: https://upload.wikimedia.org/wikipedia/commons/3/36/Flag_of_Iran_%28civil%29.svg
+    proxies:
+      - "بدون فیلترشکن 🛡️"
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: ویندوز 🧊
+    type: select
+    icon: https://icon.icepanel.io/Technology/svg/Windows-11.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "اجازه ندادن 🚫"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+  - name: کلودفلر ☁️
+    type: select
+    icon: https://icon.icepanel.io/Technology/svg/Cloudflare.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: گیتهاب 🐙
+    type: select
+    icon: https://www.svgrepo.com/show/355033/github.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: دیسکورد 🗣️
+    type: select
+    icon: https://automatorplugin.com/wp-content/uploads/2024/10/discord-icon.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: استریمیو 🎬
+    type: select
+    icon: https://stremio.github.io/stremio-addon-guide/img/stremio.svg
+    proxies:
+      - "نوع انتخاب پروکسی 🔀"
+      - "بدون فیلترشکن 🛡️"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: انی‌دسک 🔴
+    type: select 
+    icon: https://www.svgrepo.com/show/331289/anydesk.svg 
+    proxies: 
+      - "بدون فیلترشکن 🛡️"
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "اجازه ندادن 🚫"
+  - name: سایتای سانسوری 🤬
+    type: select
+    icon: https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Censorship.svg/300px-Censorship.svg.png
+    proxies:
+      - "اجازه ندادن 🚫"
+      - "نوع انتخاب پروکسی 🔀"
+      - "خودکار (بهترین پینگ) 🤖"
+      - "دستی 🤏🏻"
+      - "بدون فیلترشکن 🛡️"
+  - name: "بدون فیلترشکن 🛡️"
+    type: select
+    icon: https://www.svgrepo.com/show/6318/connection.svg
+    proxies:
+      - DIRECT
+    hidden: true
+  - name: "قطع اینترنت ⛔"
+    type: select
+    icon: https://www.svgrepo.com/show/305372/wifi-off.svg
+    proxies:
+      - REJECT
+    hidden: true
+  - name: "اجازه ندادن 🚫"
+    type: select
+    icon: https://www.svgrepo.com/show/444307/gui-ban.svg
+    proxies:
+      - REJECT
+    hidden: true
+
+rules:
+  - RULE-SET,DownloadManagers,دانلود منیجر 📥
+  - RULE-SET,Download,دانلود منیجر 📥
+  - RULE-SET,stremio,استریمیو 🎬
+  - PROCESS-NAME,im.vector.app,المنت 💬
+  - PROCESS-NAME,io.element.android.x,المنت 💬
+  - PROCESS-NAME,Element.exe,المنت 💬
+  - DOMAIN-SUFFIX,aklispro.sbs,المنت 💬
+  - DOMAIN-SUFFIX,chat.aklispro.sbs,المنت 💬
+  - DOMAIN-SUFFIX,site.aklispro.sbs,المنت 💬
+  - DOMAIN-SUFFIX,electonet.xyz,المنت 💬
+  - DOMAIN-SUFFIX,chat.electonet.xyz,المنت 💬
+  - DOMAIN-SUFFIX,rainbuwu.ir,المنت 💬
+  - DOMAIN-SUFFIX,cinny.rainbuwu.ir,المنت 💬
+  - PROCESS-NAME,chat.delta,دلتاچت ✉️
+  - PROCESS-NAME,DeltaChat.exe,دلتاچت ✉️
+  - DOMAIN-SUFFIX,arsalandalvand.ir,دلتاچت ✉️
+  - DST-PORT,993,دلتاچت ✉️
+  - DST-PORT,465,دلتاچت ✉️
+  - DST-PORT,587,دلتاچت ✉️
+  - PROCESS-NAME,com.teamspeak.ts3client,تیم‌اسپیک 🎧
+  - PROCESS-NAME,ts3client_win64.exe,تیم‌اسپیک 🎧
+  - PROCESS-NAME,ts3client_win32.exe,تیم‌اسپیک 🎧
+  - DOMAIN-SUFFIX,ag.tssq.ir,تیم‌اسپیک 🎧
+  - DST-PORT,9987,تیم‌اسپیک 🎧
+  - RULE-SET,BanProgramAD,تبلیغات اپ ها 🍃
+  - RULE-SET,BanAD,رهگیری جهانی 🛑
+  - RULE-SET,PrivateTracker,رهگیری جهانی 🛑
+  - RULE-SET,category_public_tracker,رهگیری جهانی 🛑
+  - RULE-SET,malware,سایتای مخرب ⚠️
+  - RULE-SET,phishing,سایتای مخرب ⚠️
+  - RULE-SET,cryptominers,سایتای مخرب ⚠️
+  - RULE-SET,warninglist,سایتای مخرب ⚠️
+  - RULE-SET,Ponzi,سایتای مخرب ⚠️
+  - RULE-SET,LiteAds,تبلیغات 🆎
+  - RULE-SET,iran_ads,تبلیغات 🆎
+  - RULE-SET,PersianBlocker,تبلیغات 🆎
+  - RULE-SET,ads,تبلیغات 🆎
+  - RULE-SET,BanEasyList,تبلیغات 🆎
+  - RULE-SET,twitch,توییچ 📡
+  - PROCESS-NAME,Telegram.exe,تلگرام 💬
+  - PROCESS-NAME,org.telegram.messenger,تلگرام 💬
+  - PROCESS-NAME,org.telegram.messenger.web,تلگرام 💬
+  - RULE-SET,telegram,تلگرام 💬
+  - RULE-SET,YouTube,یوتیوب ▶️
+  - RULE-SET,youtube,یوتیوب ▶️
+  - RULE-SET,YouTubeMusic,یوتیوب ▶️
+  - PROCESS-NAME,com.anydesk.anydeskandroid,انی‌دسک 🔴
+  - PROCESS-NAME,AnyDesk.exe,انی‌دسک 🔴
+  - DOMAIN-SUFFIX,anydesk.com,انی‌دسک 🔴
+  - PROCESS-NAME,Twitter.exe,توییتر 🐦
+  - PROCESS-NAME,com.twitter.android,توییتر 🐦
+  - RULE-SET,Chotwitter,توییتر 🐦
+  - RULE-SET,mihTwitter,توییتر 🐦
+  - RULE-SET,Domtwitter,توییتر 🐦
+  - PROCESS-NAME,com.spotify.music,اسپاتیفای 🎵
+  - PROCESS-NAME,Spotify.exe,اسپاتیفای 🎵
+  - RULE-SET,DomainSpotify,اسپاتیفای 🎵
+  - RULE-SET,mihspotify,اسپاتیفای 🎵
+  - PROCESS-NAME,com.instagram.android,اینستاگرام 📸
+  - RULE-SET,instagram,اینستاگرام 📸
+  - DOMAIN-SUFFIX,deepseek.com,هوش مصنوعی 🤖
+  - DOMAIN-SUFFIX,qwen.ai,هوش مصنوعی 🤖
+  - RULE-SET,category-ai,هوش مصنوعی 🤖
+  - RULE-SET,censor,سایتای سانسوری 🤬
+  - RULE-SET,apps,سایتای ایرانی 🇮🇷
+  - RULE-SET,iran,سایتای ایرانی 🇮🇷
+  - RULE-SET,arvancloud,سایتای ایرانی 🇮🇷
+  - RULE-SET,derakcloud,سایتای ایرانی 🇮🇷
+  - RULE-SET,iranserver,سایتای ایرانی 🇮🇷
+  - RULE-SET,parspack,سایتای ایرانی 🇮🇷
+  - RULE-SET,irasn,سایتای ایرانی 🇮🇷
+  - RULE-SET,ircidr,سایتای ایرانی 🇮🇷
+  - RULE-SET,ir,سایتای ایرانی 🇮🇷
+  - RULE-SET,category_ir,سایتای ایرانی 🇮🇷
+  - DOMAIN-SUFFIX,unimics.com,سایتای ایرانی 🇮🇷
+  - RULE-SET,whatsapp,واتس آپ 🟢
+  - RULE-SET,steam,استیم 🖥️
+  - RULE-SET,SteamRegionCheck,استیم 🖥️
+  - RULE-SET,game,گیم 🎮
+  - RULE-SET,GameDownload,گیم 🎮
+  - RULE-SET,category-games,گیم 🎮
+  - RULE-SET,Xbox,گیم 🎮
+  - RULE-SET,discord,دیسکورد 🗣️
+  - RULE-SET,xiaomi_white_list,نوع انتخاب پروکسی 🔀
+  - RULE-SET,xiaomi_block_list,تبلیغات اپ ها 🍃
+  - RULE-SET,windows,ویندوز 🧊
+  - RULE-SET,cloudflare,کلودفلر ☁️
+  - RULE-SET,github,گیتهاب 🐙
+  - PROCESS-NAME,com.android.vending,نوع انتخاب پروکسی 🔀
+  - PROCESS-NAME,com.google.android.gms,نوع انتخاب پروکسی 🔀
+  - RULE-SET,google-play,نوع انتخاب پروکسی 🔀
+  - RULE-SET,google,گوگل 🌍
+  - IP-CIDR,10.10.34.0/24,نوع انتخاب پروکسی 🔀
+  - RULE-SET,local_ips,بدون فیلترشکن 🛡️
+  - RULE-SET,private,بدون فیلترشکن 🛡️
+  - MATCH,نوع انتخاب پروکسی 🔀
+
+ntp:
+  enable: true
+  server: "time.apple.com"
+  port: 123
+  interval: 30
